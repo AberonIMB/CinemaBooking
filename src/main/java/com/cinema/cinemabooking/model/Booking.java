@@ -33,6 +33,7 @@ public class Booking {
     /**
      * Забронированное место
      */
+    @ManyToOne
     private Seat seat;
 
     /**

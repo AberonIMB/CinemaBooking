@@ -26,7 +26,7 @@ public class Hall {
     /**
      * Количество рядов
      */
-    private int rows;
+    private int numberOfRows;
 
     /**
      * Количество мест в ряду
@@ -36,12 +36,12 @@ public class Hall {
     /**
      * Список мест в кинозале
      */
-    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Seat> seats = new ArrayList<>();
+    @OneToMany(mappedBy = "hall")
+    private List<Seat> seats;
 
-    public Hall(String name, int rows, int seatsInRow) {
+    public Hall(String name, int numberOfRows, int seatsInRow) {
         this.name = name;
-        this.rows = rows;
+        this.numberOfRows = numberOfRows;
         this.seatsInRow = seatsInRow;
     }
 
@@ -57,20 +57,20 @@ public class Hall {
         this.name = name;
     }
 
-    public int getseatsInRow() {
+    public int getSeatsInRow() {
         return seatsInRow;
     }
 
-    public void setseatsInRow(int seatsInRow) {
+    public void setSeatsInRow(int seatsInRow) {
         this.seatsInRow = seatsInRow;
     }
 
-    public int getRows() {
-        return rows;
+    public int getNumberOfRows() {
+        return numberOfRows;
     }
 
-    public void setRows(int rows) {
-        this.rows = rows;
+    public void setNumberOfRows(int numberOfRows) {
+        this.numberOfRows = numberOfRows;
     }
 
     public List<Seat> getSeats() {

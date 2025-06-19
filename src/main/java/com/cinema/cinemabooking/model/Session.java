@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Entity
 public class Session {
 
-
     /**
      * Идентификатор сеанса
      */
@@ -31,11 +30,13 @@ public class Session {
     /**
      * Фильм
      */
+    @ManyToOne
     private Movie movie;
 
     /**
      * Зал
      */
+    @ManyToOne
     private Hall hall;
 
     /**

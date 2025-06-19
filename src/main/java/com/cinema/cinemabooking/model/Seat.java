@@ -18,7 +18,7 @@ public class Seat {
     /**
      * Ряд места
      */
-    private int row;
+    private int seatRow;
 
     /**
      * Номер места
@@ -28,21 +28,22 @@ public class Seat {
     @ManyToOne
     private Hall hall;
 
-    public Seat(int row, int seatNumber) {
-        this.row = row;
+    public Seat(int seatRow, int seatNumber, Hall hall) {
+        this.seatRow = seatRow;
         this.seatNumber = seatNumber;
+        this.hall = hall;
     }
 
     public Long getId() {
         return id;
     }
 
-    public int getRow() {
-        return row;
+    public int getSeatRow() {
+        return seatRow;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setSeatRow(int seatRow) {
+        this.seatRow = seatRow;
     }
 
     public int getSeatNumber() {
