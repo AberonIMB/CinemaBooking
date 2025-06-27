@@ -2,8 +2,8 @@ package com.cinema.cinemabooking.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Кинозал
@@ -39,11 +39,15 @@ public class Hall {
     @OneToMany(mappedBy = "hall")
     private List<Seat> seats;
 
+    private boolean isActive = true;
+
     public Hall(String name, int numberOfRows, int seatsInRow) {
         this.name = name;
         this.numberOfRows = numberOfRows;
         this.seatsInRow = seatsInRow;
     }
+
+    public Hall() {}
 
     public Long getId() {
         return id;
@@ -79,5 +83,26 @@ public class Hall {
 
     public void setSeats(List<Seat> seats) {
         this.seats = seats;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hall hall = (Hall) o;
+        return Objects.equals(id, hall.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

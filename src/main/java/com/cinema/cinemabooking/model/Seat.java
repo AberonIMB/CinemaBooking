@@ -28,11 +28,15 @@ public class Seat {
     @ManyToOne
     private Hall hall;
 
+    private boolean isActive = true;
+
     public Seat(int seatRow, int seatNumber, Hall hall) {
         this.seatRow = seatRow;
         this.seatNumber = seatNumber;
         this.hall = hall;
     }
+
+    public Seat() {}
 
     public Long getId() {
         return id;
@@ -60,5 +64,13 @@ public class Seat {
 
     public void setHall(Hall hall) {
         this.hall = hall;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

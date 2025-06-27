@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление залами</title>
+    <link rel="stylesheet" href="/css/admin-style.css">
+    <script src="/js/adminHalls.js"></script>
+</head>
+<body>
+
+<div th:replace="~{admin/fragments/adminNavigation :: adminNavbar}"></div>
+
+<h1>Управление залами</h1>
+
+<div class="controllers">
+    <button class="btn btn-info" onclick="loadHalls(true)">✅ Активные залы</button>
+    <button class="btn btn-info" onclick="loadHalls(false)">❌ Неактивные залы</button>
+    <button class="btn btn-create" onclick="window.location.href='/admin/halls/create'">➕ Создать новый зал</button>
+</div>
+
+<div id="halls-container">
+    <table id="hallsTable" class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название зала</th>
+            <th>Количество рядов</th>
+            <th>Мест в ряду</th>
+            <th>Общее количество мест</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody id="hallTableBody">
+        </tbody>
+    </table>
+</div>
+
+<script src="/js/adminHalls.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование зала</title>
+    <link rel="stylesheet" href="/css/admin-style.css">
+</head>
+<body>
+<div th:replace="~{admin/fragments/adminNavigation :: adminNavbar}"></div>
+
+<h1>Редактирование зала</h1>
+
+<form class="form-entity" th:action="@{/admin/halls/edit/{id}(id=${id})}" method="post" th:object="${hall}">
+
+    <div class="form-group">
+        <label for="name">Название зала:</label>
+        <input type="text" id="name" class="form-input" th:field="*{name}" required>
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    </div>
+
+    <input type="hidden" th:field="*{active}" />
+
+    <div class="form-group">
+        <label for="rowCount">Количество рядов:</label>
+        <input type="number" id="numberOfRows" class="form-input" th:field="*{numberOfRows}" required>
+        <div class="error" th:if="${#fields.hasErrors('numberOfRows')}" th:errors="*{numberOfRows}"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="seatsPerRow">Мест в ряду:</label>
+        <input type="number" id="seatsInRow" class="form-input" th:field="*{seatsInRow}" required>
+        <div class="error" th:if="${#fields.hasErrors('seatsInRow')}" th:errors="*{seatsInRow}"></div>
+    </div>
+
+    <div class="form-buttons">
+        <button type="submit" class="btn btn-save">💾 Сохранить</button>
+        <a href="/admin/halls"><button type="button" class="btn btn-back">↩ Назад</button></a>
+    </div>
+
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+</form>
+
+<form th:action="${hall.active} ? @{/admin/halls/deactivate/{id}(id=${id})} : @{/admin/halls/activate/{id}(id=${id})}" method="post" style="margin-top: 5px;">
+    <button
+            type="submit"
+            th:class="${hall.active} ? 'btn btn-status deactivate' : 'btn btn-status activate'"
+            th:text="${hall.active} ? '⛔ Деактивировать' : '✅ Активировать'">
+    </button>
+</form>
+</body>
+</html>

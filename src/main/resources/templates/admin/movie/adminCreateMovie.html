@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать фильм</title>
+    <link rel="stylesheet" href="/css/admin-style.css">
+</head>
+<body>
+<div th:replace="~{admin/fragments/adminNavigation :: adminNavbar}"></div>
+
+<h1>Создание фильма</h1>
+
+<form class="form-entity" th:action="@{/admin/movies/create}" method="post" th:object="${movie}">
+    <div class="form-group">
+        <label for="title">Название:</label>
+        <input type="text" id="title" class="form-input" th:field="*{title}" required>
+        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Описание:</label>
+        <textarea id="description" class="form-input" th:field="*{description}" rows="4" required></textarea>
+        <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="genres">Жанры (через запятую):</label>
+        <input type="text" id="genres" class="form-input" th:field="*{genres}" required>
+        <div th:if="${#fields.hasErrors('genres')}" th:errors="*{genres}" class="error"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="actors">Актеры (через запятую):</label>
+        <input type="text" id="actors" class="form-input" th:field="*{actors}" required>
+        <div th:if="${#fields.hasErrors('actors')}" th:errors="*{actors}" class="error"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="director">Режиссёр:</label>
+        <input type="text" id="director" class="form-input" th:field="*{director}" required>
+        <div th:if="${#fields.hasErrors('director')}" th:errors="*{director}" class="error"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="duration">Длительность (мин):</label>
+        <input type="number" id="duration" class="form-input" th:field="*{durationInMinutes}" required>
+        <div th:if="${#fields.hasErrors('durationInMinutes')}" th:errors="*{durationInMinutes}" class="error"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="releaseYear">Год выпуска:</label>
+        <input type="number" id="releaseYear" class="form-input" th:field="*{releaseYear}" required>
+        <div th:if="${#fields.hasErrors('releaseYear')}" th:errors="*{releaseYear}" class="error"></div>
+    </div>
+    <div class="form-buttons">
+        <button type="submit" class="btn btn-save">💾 Создать</button>
+        <a href="/admin/movies"><button type="button" class="btn btn-back">↩ Назад</button></a>
+    </div>
+
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+</form>
+
+</body>
+</html>
