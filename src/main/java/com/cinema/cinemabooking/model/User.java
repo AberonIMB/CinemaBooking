@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 public class User {
 
-
     /**
      * Идентификатор пользователя
      */
@@ -33,17 +32,22 @@ public class User {
     /**
      * Роль пользователя
      */
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    private String name;
 
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
 
-    public User(String email, String password, UserRole role) {
+    public User(String email, String name, String password, UserRole role) {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.name = name;
     }
+
+    public User() {}
 
     public Long getId() {
         return id;
@@ -71,5 +75,13 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

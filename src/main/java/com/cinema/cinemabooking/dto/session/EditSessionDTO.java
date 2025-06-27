@@ -1,6 +1,6 @@
 package com.cinema.cinemabooking.dto.session;
 
-import com.cinema.cinemabooking.dto.session.validation.SessionDateTimeValid;
+import com.cinema.cinemabooking.dto.validation.SessionDateTimeValid;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

@@ -1,4 +1,4 @@
-package com.cinema.cinemabooking.dto.session.validation;
+package com.cinema.cinemabooking.dto.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
