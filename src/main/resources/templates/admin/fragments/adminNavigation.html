@@ -1,0 +1,15 @@
+<!-- fragments/admin-navbar.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="adminNavbar">
+    <div class="logo"><a href="/admin">Админ-Панель</a></div>
+    <ul>
+        <li><a href="/admin/movies" id="movies-link">Фильмы</a></li>
+        <li><a href="/admin/halls">Залы</a></li>
+        <li><a href="/admin/sessions">Сеансы</a></li>
+        <li><a href="/admin/logout">Выход</a></li>
+    </ul>
+</nav>
+</body>
+</html>

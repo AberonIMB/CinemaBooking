@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление сеансами</title>
+
+    <link rel="stylesheet" href="/css/admin-style.css">
+</head>
+<body>
+<div th:replace="~{admin/fragments/adminNavigation :: adminNavbar}"></div>
+
+<h1>Управление сеансами</h1>
+
+<div class="filter-section">
+    <div class="filter-inputs">
+        <input type="text" id="movieFilter" class="form-input" placeholder="Введите название фильма" autocomplete="off">
+
+        <select id="hallFilter" class="form-select">
+            <option value="">Все залы</option>
+            <option th:each="hall : ${halls}"
+                    th:value="${hall.id}"
+                    th:text="${hall.name + (hall.active ? '' : ' (неактивный)')}">
+            </option>
+        </select>
+
+        <input type="date" id="dateFilter" class="form-input"
+               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+    </div>
+
+    <div class="controllers">
+        <button type="button" class="btn btn-info" id="btnFilter">🔍 Применить фильтры</button>
+        <button type="button" class="btn btn-create" onclick="window.location.href='/admin/sessions/create'">➕ Создать сеанс</button>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Фильм</th>
+        <th>Зал</th>
+        <th>Дата</th>
+        <th>Время</th>
+        <th>Цена</th>
+        <th>Статус</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody id="sessionTableBody">
+    </tbody>
+</table>
+
+<script src="/js/adminSessions.js"></script>
+</body>
+</html>
