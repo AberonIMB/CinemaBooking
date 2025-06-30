@@ -3,8 +3,7 @@ package com.cinema.cinemabooking.model;
 import com.cinema.cinemabooking.model.enums.UserRole;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 /**
  * Пользователь
@@ -36,9 +35,6 @@ public class User {
     private UserRole role;
 
     private String name;
-
-    @OneToMany(mappedBy = "user")
-    private List<Booking> bookings = new ArrayList<>();
 
     public User(String email, String name, String password, UserRole role) {
         this.email = email;
@@ -83,5 +79,18 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

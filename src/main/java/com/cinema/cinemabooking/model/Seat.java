@@ -36,7 +36,8 @@ public class Seat {
         this.hall = hall;
     }
 
-    public Seat() {}
+    public Seat() {
+    }
 
     public Long getId() {
         return id;
@@ -72,5 +73,10 @@ public class Seat {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    @Override
+    public String toString() {
+        return "Ряд " + seatRow + ", Место " + seatNumber;
     }
 }

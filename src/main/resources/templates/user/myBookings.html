@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Мои бронирования</title>
+    <link rel="stylesheet" th:href="@{/css/navigation.css}">
+    <link rel="stylesheet" th:href="@{/css/bookings.css}">
+</head>
+<body>
+<div th:replace="~{user/fragments/userNavigation :: userNavigation}"></div>
+<div class="container">
+    <h1>Мои бронирования</h1>
+
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${success}" class="success">
+        <p th:text="${success}"></p>
+    </div>
+
+    <section class="active-bookings">
+        <h2>Активные брони</h2>
+
+        <form th:action="@{/bookings/cancel}" method="post" id="cancelForm">
+            <table>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Фильм</th>
+                    <th>Дата сеанса</th>
+                    <th>Время</th>
+                    <th>Зал</th>
+                    <th>Ряд</th>
+                    <th>Место</th>
+                    <th>Цена</th>
+                    <th>Статус</th>
+                    <th>Дата брони</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="booking : ${activeBookings}">
+                    <td>
+                        <input type="checkbox" name="bookingIds"
+                               class="select-checkbox"
+                               th:value="${booking.id}"
+                               th:if="${booking.statusDescription == 'Забронирован'}"/>
+                    </td>
+                    <td th:text="${booking.movieTitle}"></td>
+                    <td th:text="${#temporals.format(booking.sessionDate, 'dd.MM.yyyy')}"></td>
+                    <td th:text="${booking.sessionTime}"></td>
+                    <td th:text="${booking.hallName}"></td>
+                    <td th:text="${booking.rowNumber}"></td>
+                    <td th:text="${booking.seatNumber}"></td>
+                    <td th:text="${booking.price + ' ₽'}"></td>
+                    <td th:text="${booking.statusDescription}"></td>
+                    <td th:text="${#temporals.format(booking.bookingTime, 'dd.MM.yyyy HH:mm')}"></td>
+
+                    <td>
+                        <button type="submit"
+                                class="btn-pay"
+                                th:if="${booking.statusDescription == 'Забронирован'}"
+                                th:formaction="@{/bookings/pay/{id}(id=${booking.id})}"
+                                formmethod="post">
+                            Оплатить
+                        </button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(activeBookings)}">
+                    <td colspan="10" class="empty-message">У вас пока нет активных броней.</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn-cancel-multiple" id="cancelButton" disabled>Отменить выбранные</button>
+        </form>
+    </section>
+
+    <section class="history-bookings" style="margin-top: 40px;">
+        <h2>История бронирований</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Фильм</th>
+                <th>Дата сеанса</th>
+                <th>Время сеанса</th>
+                <th>Зал</th>
+                <th>Ряд</th>
+                <th>Место</th>
+                <th>Цена</th>
+                <th>Статус</th>
+                <th>Дата бронирования</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="booking : ${finishedBookings}">
+                <td th:text="${booking.movieTitle}"></td>
+                <td th:text="${#temporals.format(booking.sessionDate, 'dd.MM.yyyy')}"></td>
+                <td th:text="${booking.sessionTime}"></td>
+                <td th:text="${booking.hallName}"></td>
+                <td th:text="${booking.rowNumber}"></td>
+                <td th:text="${booking.seatNumber}"></td>
+                <td th:text="${booking.price + ' ₽'}"></td>
+                <td th:text="${booking.statusDescription}"></td>
+                <td th:text="${#temporals.format(booking.bookingTime, 'dd.MM.yyyy HH:mm')}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(finishedBookings)}">
+                <td colspan="9" class="empty-message">История бронирований пуста.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+<script src="/js/myBookings.js"><</script>
+</body>
+</html>

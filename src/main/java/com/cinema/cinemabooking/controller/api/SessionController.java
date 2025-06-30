@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Api контроллер для работы с сеансами
+ */
 @RestController
 @RequestMapping("api/sessions")
 public class SessionController {
@@ -24,8 +26,14 @@ public class SessionController {
     @Autowired
     private SessionMapper sessionMapper;
 
+    /**
+     * Получить список сеансов по фильтрам
+     * @param movieTitle название фильма
+     * @param hallId идентификатор зала
+     * @param date дата
+     */
     @GetMapping
-    public List<AdminSessionDTO> getSessions(@RequestParam(required = false) String movieTitle,
+    public List<AdminSessionDTO> getSessionsByFilters(@RequestParam(required = false) String movieTitle,
                                              @RequestParam(required = false) Long hallId,
                                              @RequestParam(required = false)
                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date) {
@@ -33,7 +41,6 @@ public class SessionController {
         return sessionService.findSessionsByFilters(movieTitle, hallId, date)
                 .stream()
                 .map(sessionMapper::mapToAdminSessionDTO)
-                .sorted(Comparator.comparing(AdminSessionDTO::getId))
                 .toList();
     }
 }

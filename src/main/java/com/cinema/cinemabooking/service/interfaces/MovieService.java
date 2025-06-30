@@ -1,7 +1,6 @@
 package com.cinema.cinemabooking.service.interfaces;
 
-import com.cinema.cinemabooking.dto.movie.CreateMovieDTO;
-import com.cinema.cinemabooking.dto.movie.EditMovieDTO;
+import com.cinema.cinemabooking.dto.movie.CreateEditMovieDTO;
 import com.cinema.cinemabooking.model.Movie;
 
 import java.util.List;
@@ -19,9 +18,9 @@ public interface MovieService {
 
     /**
      * Создание фильма
-     * @param createMovieDTO данные для создания фильма
+     * @param createEditMovieDTO данные для создания фильма
      */
-    void createMovieFromDTO(CreateMovieDTO createMovieDTO);
+    void createMovieFromDTO(CreateEditMovieDTO createEditMovieDTO);
 
     /**
      * Получить фильм по идентификатору
@@ -34,7 +33,7 @@ public interface MovieService {
      * @param id идентификатор фильма
      * @param movieDTO данные для обновления фильма
      */
-    void updateMovie(Long id, EditMovieDTO movieDTO);
+    void updateMovie(Long id, CreateEditMovieDTO movieDTO);
 
     /**
      * Получить список фильмов по названию

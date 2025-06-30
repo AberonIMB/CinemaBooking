@@ -69,7 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${session.price}</td>
                 <td>${session.active ? 'Активный' : 'Неактивный'}</td>
                 <td>
-                    <button class="btn btn-edit" onclick="window.location.href='/admin/sessions/edit/${session.id}'">Редактировать</button>
+                    ${session.active ? `<button class="btn btn-edit"
+                    onclick="window.location.href='/admin/sessions/edit/${session.id}'">Редактировать</button>` : ''}
+
                     <button class="btn btn-info">Информация</button>
                 </td>
             `;

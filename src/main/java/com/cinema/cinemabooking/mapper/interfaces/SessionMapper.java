@@ -35,4 +35,6 @@ public interface SessionMapper {
      * @return AdminSessionDTO полная информация о сеансе
      */
     AdminSessionDTO mapToAdminSessionDTO(Session session);
+
+    ScheduleSessionDTO mapToScheduleSessionDTO(Session session);
 }

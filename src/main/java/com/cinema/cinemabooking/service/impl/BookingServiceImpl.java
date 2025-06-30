@@ -1,12 +1,23 @@
 package com.cinema.cinemabooking.service.impl;
 
+import com.cinema.cinemabooking.exception.booking.BookingCancellationException;
+import com.cinema.cinemabooking.exception.booking.BookingNotFoundException;
+import com.cinema.cinemabooking.exception.booking.BookingPaymentException;
+import com.cinema.cinemabooking.exception.booking.SeatAlreadyBookedException;
+import com.cinema.cinemabooking.model.Booking;
+import com.cinema.cinemabooking.model.Seat;
 import com.cinema.cinemabooking.model.Session;
+import com.cinema.cinemabooking.model.User;
 import com.cinema.cinemabooking.model.enums.BookingStatus;
 import com.cinema.cinemabooking.repository.BookingRepository;
 import com.cinema.cinemabooking.service.interfaces.BookingService;
+import com.cinema.cinemabooking.service.interfaces.SeatService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -15,8 +26,97 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private SeatService seatService;
+
     @Override
     public boolean hasSessionActiveBooking(Session session) {
         return bookingRepository.existsBySessionAndStatusIn(session, List.of(BookingStatus.BOOKED, BookingStatus.PAID));
+    }
+
+    @Override
+    public List<Booking> getActiveUsersBookings(User user) {
+        return bookingRepository.findByUserAndStatusIn(user, List.of(BookingStatus.BOOKED, BookingStatus.PAID))
+                .stream()
+                .sorted(Comparator.comparing(b -> b.getSession().getStartTime()))
+                .toList();
+    }
+
+    @Override
+    public List<Booking> getFinishedUsersBookings(User user) {
+        return bookingRepository.findByUserAndStatusIn(user, List.of(BookingStatus.COMPLETED, BookingStatus.EXPIRED))
+                .stream()
+                .sorted((b1, b2) -> b2.getSession().getStartTime().compareTo(b1.getSession().getStartTime()))
+                .toList();
+    }
+
+    @Override
+    public void updateBookingStatus(Booking booking, BookingStatus status) {
+        booking.setStatus(status);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public List<Booking> getBookings(Session session) {
+        return bookingRepository.findBySession(session);
+    }
+
+    @Override
+    public void payBooking(Long id, User user) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(BookingNotFoundException::new);
+
+        if (!booking.getUser().equals(user)) {
+            throw new BookingNotFoundException();
+        }
+
+        if (booking.getStatus() != BookingStatus.BOOKED) {
+            throw new BookingPaymentException(booking);
+        }
+
+        booking.setStatus(BookingStatus.PAID);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    @Transactional
+    public void createBookings(Session session, List<Long> selectedSeatsIds, User user) {
+
+        List<Seat> seats = selectedSeatsIds.stream()
+                .map(seatService::getSeatById)
+                .toList();
+
+        List<Booking> bookings = bookingRepository.findBySessionAndSeatIn(session, seats);
+
+        if (!bookings.isEmpty()) {
+            throw new SeatAlreadyBookedException(bookings.get(0).getSeat());
+        }
+
+        for (Seat seat : seats) {
+            Booking booking = new Booking(user, session, seat);
+            bookingRepository.save(booking);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void cancelBookings(List<Long> bookingIds, User user) {
+        List<Booking> bookings = bookingRepository.findAllByUserAndIdIn(user, bookingIds);
+
+        if (bookings.size() != bookingIds.size()) {
+            throw new BookingNotFoundException();
+        }
+
+        for (Booking booking : bookings) {
+            if (booking.getStatus() == BookingStatus.PAID) {
+                throw new BookingCancellationException("Невозможно отменить бронь, так как она уже оплачена, " +
+                        "а я не реализовал работу с оплатой");
+            }
+
+            if (booking.getStatus() != BookingStatus.BOOKED) {
+                throw new BookingCancellationException("Невозможно отменить бронь, так как сеанс уже завершен");
+            }
+        }
+
+        bookingRepository.deleteAll(bookings);
     }
 }

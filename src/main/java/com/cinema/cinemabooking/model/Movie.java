@@ -1,6 +1,6 @@
 package com.cinema.cinemabooking.model;
 
-import com.cinema.cinemabooking.dto.movie.EditMovieDTO;
+import com.cinema.cinemabooking.dto.movie.CreateEditMovieDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -148,7 +148,7 @@ public class Movie {
         isActive = active;
     }
 
-    public void update(EditMovieDTO data) {
+    public void update(CreateEditMovieDTO data) {
         this.title = data.getTitle();
         this.description = data.getDescription();
         this.genres = data.getGenres();

@@ -2,6 +2,7 @@ package com.cinema.cinemabooking.service.impl;
 
 import com.cinema.cinemabooking.dto.user.RegisterDTO;
 import com.cinema.cinemabooking.exception.user.UserAlreadyExistsException;
+import com.cinema.cinemabooking.exception.user.UserNotFoundException;
 import com.cinema.cinemabooking.model.User;
 import com.cinema.cinemabooking.model.enums.UserRole;
 import com.cinema.cinemabooking.repository.UserRepository;
@@ -21,7 +22,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new UserNotFoundException(email);
+        }
+
+        return user;
     }
 
     @Override

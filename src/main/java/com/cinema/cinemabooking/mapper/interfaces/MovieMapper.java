@@ -1,7 +1,8 @@
 package com.cinema.cinemabooking.mapper.interfaces;
 
 import com.cinema.cinemabooking.dto.movie.AdminMovieDTO;
-import com.cinema.cinemabooking.dto.movie.EditMovieDTO;
+import com.cinema.cinemabooking.dto.movie.CreateEditMovieDTO;
+import com.cinema.cinemabooking.dto.movie.ScheduleMovieDTO;
 import com.cinema.cinemabooking.dto.movie.ShortMovieDTO;
 import com.cinema.cinemabooking.model.Movie;
 
@@ -29,5 +30,7 @@ public interface MovieMapper {
      * @param movie фильм
      * @return EditMovieDTO данные для редактирования фильма
      */
-    EditMovieDTO mapToEditMovieDTO(Movie movie);
+    CreateEditMovieDTO mapToCreateEditMovieDTO(Movie movie);
+
+    ScheduleMovieDTO mapToScheduleMovieDTO(Movie movie);
 }

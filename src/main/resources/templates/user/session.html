@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${bookingSession.movieTitle}">Бронирование</title>
+    <link rel="stylesheet" href="/css/session.css">
+    <link rel="stylesheet" href="/css/navigation.css">
+</head>
+<body>
+<div th:replace="~{user/fragments/userNavigation :: userNavigation}"></div>
+
+<div class="container">
+    <div class="movie-info">
+        <h1 th:text="${bookingSession.movieTitle}">Название фильма</h1>
+        <p><strong>Дата</strong> <span th:text="${bookingSession.date}"></span></p>
+        <p><strong>Время</strong> <span th:text="${bookingSession.time}"></span></p>
+        <p><strong>Зал:</strong> <span th:text="${bookingSession.hallName}"></span></p>
+        <p><strong>Цена:</strong> <span th:text="${bookingSession.price + '₽'}"></span></p>
+
+        <div th:if="${error}" class="error">
+            <p th:text="${error}"></p>
+        </div>
+
+        <div th:if="${success}" class="success">
+            <p th:text="${success}"></p>
+        </div>
+    </div>
+
+    <div class="hall-layout">
+        <div class="screen">ЭКРАН</div>
+
+        <div th:each="row : ${#numbers.sequence(1, bookingSession.rowsCount)}" class="seat-row">
+            <div class="row-number" th:text="${row}"></div>
+            <div th:each="seat : ${bookingSession.seats}"
+                 th:if="${seat.rowNumber == row}"
+                 th:id="${seat.id}"
+                 class="seat"
+                 th:classappend="${seat.booked} ? ' booked' : ''"
+                 th:data-row="${seat.rowNumber}"
+                 th:data-seat="${seat.seatNumber}">
+            </div>
+            <div class="row-number" th:text="${row}"></div>
+        </div>
+    </div>
+
+    <div id="selected-info">Выберите места.</div>
+
+    <form id="booking-form" th:action="@{/sessions/{id}(id=${bookingSession.sessionId})}" method="post" style="display: none;">
+        <input type="hidden" name="sessionId" th:value="${bookingSession.sessionId}">
+        <input type="hidden" name="selectedSeats" id="selectedSeatsInput" value="">
+        <button type="submit" id="submitBooking">Забронировать</button>
+    </form>
+</div>
+<script src="/js/booking.js"></script>
+</body>
+</html>

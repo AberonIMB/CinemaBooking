@@ -1,5 +1,6 @@
 package com.cinema.cinemabooking.service.impl;
 
+import com.cinema.cinemabooking.exception.seat.SeatNotFoundException;
 import com.cinema.cinemabooking.model.Hall;
 import com.cinema.cinemabooking.model.Seat;
 import com.cinema.cinemabooking.repository.SeatRepository;
@@ -38,12 +39,27 @@ public class SeatServiceImpl implements SeatService {
        createSeatsForHall(hall);
     }
 
+    @Override
+    public List<Seat> getSeatsForHall(Hall hall) {
+        return seatRepository.getSeatsByHallAndIsActive(hall, true);
+    }
+
+    @Override
+    public Seat getSeatById(Long id) {
+        return seatRepository.findById(id).orElseThrow(() -> new SeatNotFoundException(id));
+    }
+
+//    @Override
+//    public List<Seat> getSeatsByIds(List<Long> ids) {
+//        return seatRepository.findByIdIn(ids);
+//    }
+
     /**
      * Переводит все места из активного состояния в неактивное
      * @param hall зал
      */
     private void deactivateSeatsForHall(Hall hall) {
-        List<Seat> seats = seatRepository.getSeatsByHallIdAndIsActive(hall.getId(), true);
+        List<Seat> seats = seatRepository.getSeatsByHallAndIsActive(hall, true);
 
         for (Seat seat : seats) {
             seat.setActive(false);
