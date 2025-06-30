@@ -1,7 +1,6 @@
 package com.cinema.cinemabooking.service.impl;
 
-import com.cinema.cinemabooking.dto.movie.CreateMovieDTO;
-import com.cinema.cinemabooking.dto.movie.EditMovieDTO;
+import com.cinema.cinemabooking.dto.movie.CreateEditMovieDTO;
 import com.cinema.cinemabooking.exception.movie.CannotChangeDurationException;
 import com.cinema.cinemabooking.exception.movie.MovieAlreadyExistsException;
 import com.cinema.cinemabooking.exception.movie.MovieNotFoundException;
@@ -26,19 +25,19 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void createMovieFromDTO(CreateMovieDTO createMovieDTO) {
-        if (movieRepository.findByTitle(createMovieDTO.getTitle()) != null) {
-            throw new MovieAlreadyExistsException(createMovieDTO.getTitle());
+    public void createMovieFromDTO(CreateEditMovieDTO createEditMovieDTO) {
+        if (movieRepository.findByTitle(createEditMovieDTO.getTitle()) != null) {
+            throw new MovieAlreadyExistsException(createEditMovieDTO.getTitle());
         }
 
         Movie movie = new Movie(
-                createMovieDTO.getTitle(),
-                createMovieDTO.getDescription(),
-                createMovieDTO.getGenres(),
-                createMovieDTO.getActors(),
-                createMovieDTO.getDirector(),
-                createMovieDTO.getDurationInMinutes(),
-                createMovieDTO.getReleaseYear()
+                createEditMovieDTO.getTitle(),
+                createEditMovieDTO.getDescription(),
+                createEditMovieDTO.getGenres(),
+                createEditMovieDTO.getActors(),
+                createEditMovieDTO.getDirector(),
+                createEditMovieDTO.getDurationInMinutes(),
+                createEditMovieDTO.getReleaseYear()
         );
 
         movieRepository.save(movie);
@@ -52,7 +51,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public void updateMovie(Long id, EditMovieDTO movieDTO) {
+    public void updateMovie(Long id, CreateEditMovieDTO movieDTO) {
         Movie movie = movieRepository.findById(id).orElseThrow(
                 () -> new MovieNotFoundException(id));
 

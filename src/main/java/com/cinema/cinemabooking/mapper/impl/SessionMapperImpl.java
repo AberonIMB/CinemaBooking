@@ -65,4 +65,14 @@ public class SessionMapperImpl implements SessionMapper {
         adminSessionDTO.setActive(session.isActive());
         return adminSessionDTO;
     }
+
+    @Override
+    public ScheduleSessionDTO mapToScheduleSessionDTO(Session session) {
+        ScheduleSessionDTO scheduleSessionDTO = new ScheduleSessionDTO();
+        scheduleSessionDTO.setId(session.getId());
+        scheduleSessionDTO.setHallName(session.getHall().getName());
+        scheduleSessionDTO.setTime(session.getStartTime().toLocalTime());
+        scheduleSessionDTO.setPrice(session.getPrice());
+        return scheduleSessionDTO;
+    }
 }

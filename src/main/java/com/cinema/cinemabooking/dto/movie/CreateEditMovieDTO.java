@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 /**
  * DTO для редактирования фильма
  */
-public class EditMovieDTO {
+public class CreateEditMovieDTO {
 
     @NotBlank(message = "Название фильма обязательно для заполнения")
     private String title;
@@ -34,7 +34,7 @@ public class EditMovieDTO {
     @Min(value = 1990, message = "Год выпуска не может быть меньше 1990")
     private Integer releaseYear;
 
-    public EditMovieDTO() {
+    public CreateEditMovieDTO() {
 
     }
 

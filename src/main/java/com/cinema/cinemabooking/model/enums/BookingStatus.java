@@ -5,8 +5,8 @@ package com.cinema.cinemabooking.model.enums;
  */
 public enum BookingStatus {
     BOOKED, //бронь оформлена, но еще не оплачена
-    EXPIRED, // бронь не оплачена за 30 минут до начала сеанса
-    CANCELLED, // бронь отменена
+    EXPIRED, // бронь не оплачена за 60 минут до начала сеанса
+
     PAID, // бронь оплачена
     COMPLETED // бронь завершена
 }

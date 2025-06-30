@@ -2,39 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Вход</title>
+    <link rel="stylesheet" href="/css/navigation.css">
     <link rel="stylesheet" href="/css/auth.css">
     <meta charset="UTF-8">
 </head>
 <body>
 
-<form th:action="@{/auth/login}" method="post">
-    <h2>Вход в систему</h2>
+<div th:replace="~{user/fragments/userNavigation :: userNavigation}"></div>
 
-    <label for="email">Email:</label>
-    <input type="text" name="username" id="email" required />
+<div class="form-container">
+    <form th:action="@{/auth/login}" method="post">
+        <h2>Вход в систему</h2>
 
-    <label for="password">Пароль:</label>
-    <input type="password" name="password" id="password" required />
+        <label for="email">Email:</label>
+        <input type="text" name="username" id="email" required />
 
-    <div class="notification">
-        <div th:if="${param.error}">
-            <p style="color:red">Неверный email или пароль</p>
+        <label for="password">Пароль:</label>
+        <input type="password" name="password" id="password" required />
+
+        <div class="notification">
+            <div th:if="${param.error}">
+                <p style="color:red">Неверный email или пароль</p>
+            </div>
+
+            <div th:if="${param.logout}">
+                <p style="color:green">Вы вышли из системы</p>
+            </div>
+
+            <div th:if="${param.registered}">
+                <p style="color:green">Регистрация прошла успешно. Войдите.</p>
+            </div>
         </div>
 
-        <div th:if="${param.logout}">
-            <p style="color:green">Вы вышли из системы</p>
+        <div class="button-group">
+            <button type="submit" id="login-button" class="btn btn-login">Войти</button>
+            <button type="button" class="btn btn-registration" onclick="location.href='/auth/registration'">Зарегистрироваться</button>
         </div>
-
-        <div th:if="${param.registered}">
-            <p style="color:green">Регистрация прошла успешно. Войдите.</p>
-        </div>
-    </div>
-
-    <div class="button-group">
-        <button type="submit" id="login-button" class="btn btn-login">Войти</button>
-        <button type="button" class="btn btn-registration" onclick="location.href='/auth/registration'">Зарегистрироваться</button>
-    </div>
-</form>
+    </form>
+</div>
 
 </body>
 </html>

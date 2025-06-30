@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Фильмы в прокате</title>
+    <link rel="stylesheet" href="/css/movies.css">
+    <link rel="stylesheet" href="/css/navigation.css">
+</head>
+<body>
+<div th:replace="~{user/fragments/userNavigation :: userNavigation}"></div>
+<div class="container">
+    <h1>Фильмы в прокате</h1>
+
+    <div class="movie-grid">
+        <div class="movie-card" th:each="movie : ${movies}">
+            <a th:href="@{'/movies/' + ${movie.id}}">
+                <img src="/images/placeholder.jpeg" alt="Постер фильма" class="movie-poster">
+                <h2 class="movie-title" th:text="${movie.title}">Название фильма</h2>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

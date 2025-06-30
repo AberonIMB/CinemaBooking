@@ -30,9 +30,10 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/css/**","/auth/login", "/auth/registration")
+                        .requestMatchers("/css/**","/js/**", "/images/**", "/api/**",
+                                "/auth/login", "/auth/registration", "/schedule", "/movies", "/movie/**", "/")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
@@ -43,7 +44,7 @@ public class SpringSecurityConfig {
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/auth/login&logout")
+                        .logoutSuccessUrl("/auth/login?logout")
                         .invalidateHttpSession(true));
         return http.build();
     }

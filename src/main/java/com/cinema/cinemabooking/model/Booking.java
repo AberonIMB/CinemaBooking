@@ -44,7 +44,10 @@ public class Booking {
     /**
      * Статус бронирования
      */
+    @Enumerated(EnumType.STRING)
     private BookingStatus status;
+
+    public Booking() {}
 
     public Booking(User user, Session session, Seat seat) {
         this.user = user;

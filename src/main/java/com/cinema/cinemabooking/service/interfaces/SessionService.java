@@ -3,6 +3,7 @@ package com.cinema.cinemabooking.service.interfaces;
 import com.cinema.cinemabooking.dto.session.SessionCreateData;
 import com.cinema.cinemabooking.dto.session.SessionUpdateData;
 import com.cinema.cinemabooking.model.Hall;
+import com.cinema.cinemabooking.model.Movie;
 import com.cinema.cinemabooking.model.Session;
 
 import java.time.LocalDate;
@@ -18,6 +19,10 @@ public interface SessionService {
      * @param hall зал
      */
     List<Session> getActiveSessionsByHall(Hall hall);
+
+    List<Session> getActiveSessionsByDate(LocalDate date);
+
+    List<Session> getActiveSessionsByMovieAndDate(Movie movie, LocalDate date);
 
     /**
      * Создание сеанса
@@ -44,4 +49,8 @@ public interface SessionService {
      * @param data данные для обновления сеанса
      */
     void updateSession(SessionUpdateData data);
+
+    List<Session> getSessionsByStatus(boolean status);
+
+    void updateSessionStatus(Session session, boolean status);
 }

@@ -1,6 +1,7 @@
 package com.cinema.cinemabooking.repository;
 
 import com.cinema.cinemabooking.model.Hall;
+import com.cinema.cinemabooking.model.Movie;
 import com.cinema.cinemabooking.model.Session;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,7 +28,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
      * @param hall зал
      * @param startOfDay начало дня
      * @param endOfDay конец дня
-     * @return
      */
     @Query("SELECT s FROM Session s WHERE s.hall = :hall " +
             "AND s.startTime < :endOfDay " +
@@ -52,5 +52,17 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
                                          @Param("hallId") Long hallId,
                                          @Param("date") LocalDate date);
 
+    @Query("SELECT s FROM Session s " +
+            "WHERE s.isActive = true " +
+            "AND FUNCTION('DATE', s.startTime) = :date")
+    List<Session> findActiveSessionsByDate(@Param("date") LocalDate date);
 
+    @Query("SELECT s FROM Session s " +
+            "WHERE s.movie = :movie " +
+            "AND s.isActive = true " +
+            "AND FUNCTION('DATE', s.startTime) = :date")
+    List<Session> findActiveSessionsByMovieAndDate(@Param("movie") Movie movie,
+                                                   @Param("date") LocalDate date);
+
+    List<Session> findByIsActive(boolean isActive);
 }

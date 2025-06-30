@@ -1,6 +1,7 @@
 package com.cinema.cinemabooking.dto.session;
 
 
+import com.cinema.cinemabooking.dto.validation.MinutesTens;
 import com.cinema.cinemabooking.model.Session;
 import jakarta.validation.constraints.*;
 
@@ -17,6 +18,7 @@ public class CreateSessionDTO {
     private LocalDate date;
 
     @NotNull(message = "Время начала сеанса обязательно")
+    @MinutesTens
     private LocalTime time;
 
     @NotNull(message = "Фильм обязателен для выбора")

@@ -1,5 +1,6 @@
 package com.cinema.cinemabooking.dto.session;
 
+import com.cinema.cinemabooking.dto.validation.MinutesTens;
 import com.cinema.cinemabooking.dto.validation.SessionDateTimeValid;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +18,7 @@ public class EditSessionDTO {
     private Long id;
 
     @NotNull(message = "Время начала сеанса обязательно")
+    @MinutesTens
     private LocalTime time;
 
     @NotNull(message = "Дата обязательна для выбора")

@@ -1,25 +1,30 @@
 package com.cinema.cinemabooking.service.impl;
 
+import com.cinema.cinemabooking.dto.session.AdminSessionDTO;
 import com.cinema.cinemabooking.dto.session.SessionCreateData;
 import com.cinema.cinemabooking.dto.session.SessionUpdateData;
 import com.cinema.cinemabooking.exception.hall.HallIsNotActiveException;
 import com.cinema.cinemabooking.exception.session.ActiveBookingsExistException;
+import com.cinema.cinemabooking.exception.session.SessionAlreadyFinishedException;
 import com.cinema.cinemabooking.exception.session.SessionNotFoundException;
 import com.cinema.cinemabooking.exception.session.SessionOverlapException;
 import com.cinema.cinemabooking.model.Hall;
+import com.cinema.cinemabooking.model.Movie;
 import com.cinema.cinemabooking.model.Session;
 import com.cinema.cinemabooking.repository.SessionRepository;
 import com.cinema.cinemabooking.service.interfaces.BookingService;
 import com.cinema.cinemabooking.service.interfaces.MovieService;
 import com.cinema.cinemabooking.service.interfaces.SessionService;
 import jakarta.annotation.Nullable;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -40,12 +45,41 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public Session getSessionById(Long id) {
-        return sessionRepository.findById(id).orElseThrow(() -> new SessionNotFoundException(id));
+    public List<Session> getActiveSessionsByDate(LocalDate date) {
+        return sessionRepository.findActiveSessionsByDate(date);
     }
 
     @Override
-    @Transactional
+    public List<Session> getActiveSessionsByMovieAndDate(Movie movie, LocalDate date) {
+        return sessionRepository.findActiveSessionsByMovieAndDate(movie, date);
+    }
+
+    @Override
+    public List<Session> getSessionsByStatus(boolean status) {
+        return sessionRepository.findByIsActive(status);
+    }
+
+    @Override
+    public void updateSessionStatus(Session session, boolean status) {
+
+        session.setActive(status);
+        sessionRepository.save(session);
+    }
+
+    @Override
+    public Session getSessionById(Long id) {
+        Session session =  sessionRepository.findById(id)
+                .orElseThrow(() -> new SessionNotFoundException(id));
+
+        if (!session.isActive()) {
+            throw new SessionAlreadyFinishedException(session);
+        }
+
+        return session;
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void createSession(SessionCreateData sessionData) {
 
         Hall hall = sessionData.getHall();
@@ -61,11 +95,14 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<Session> findSessionsByFilters(String movieTitle, Long hallId, LocalDate date) {
-        return sessionRepository.findSessionsByFilters(movieTitle, hallId, date);
+        return sessionRepository.findSessionsByFilters(movieTitle, hallId, date)
+                .stream()
+                .sorted(Comparator.comparing(Session::isActive).reversed())
+                .toList();
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateSession(SessionUpdateData data) {
         Session session = sessionRepository.findById(data.getId())
                 .orElseThrow(() -> new SessionNotFoundException(data.getId()));

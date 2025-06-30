@@ -1,6 +1,9 @@
 package com.cinema.cinemabooking.service.interfaces;
 
 import com.cinema.cinemabooking.model.Hall;
+import com.cinema.cinemabooking.model.Seat;
+
+import java.util.List;
 
 
 /**
@@ -19,4 +22,8 @@ public interface SeatService {
      * @param hall зал
      */
     void updateSeatsForHall(Hall hall);
+
+    List<Seat> getSeatsForHall(Hall hall);
+
+    Seat getSeatById(Long id);
 }

@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Регистрация</title>
+    <link rel="stylesheet" href="/css/navigation.css">
     <link rel="stylesheet" href="/css/auth.css" />
 </head>
 <body>
-<div class="login-container">
+<div th:replace="~{user/fragments/userNavigation :: userNavigation}"></div>
+
+<div class="form-container">
     <form th:action="@{/auth/registration}" method="post" th:object="${user}">
         <h2>Регистрация</h2>
 

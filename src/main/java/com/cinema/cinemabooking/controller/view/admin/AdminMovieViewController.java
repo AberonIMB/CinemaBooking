@@ -1,7 +1,6 @@
 package com.cinema.cinemabooking.controller.view.admin;
 
-import com.cinema.cinemabooking.dto.movie.CreateMovieDTO;
-import com.cinema.cinemabooking.dto.movie.EditMovieDTO;
+import com.cinema.cinemabooking.dto.movie.CreateEditMovieDTO;
 import com.cinema.cinemabooking.exception.movie.MovieAlreadyExistsException;
 import com.cinema.cinemabooking.mapper.interfaces.MovieMapper;
 import com.cinema.cinemabooking.model.Movie;
@@ -39,28 +38,28 @@ public class AdminMovieViewController {
      */
     @GetMapping("/create")
     public String createMovie(Model model) {
-        model.addAttribute("movie", new CreateMovieDTO());
+        model.addAttribute("movie", new CreateEditMovieDTO());
         return "admin/movie/adminCreateMovie";
     }
 
     /**
      * Создает фильм из переданного DTO, если ошибок нет, то перенаправляет на страницу с фильмами,
      * иначе добавляет ошибку на страницу
-     * @param createMovieDTO дто для создания фильма
+     * @param createEditMovieDTO дто для создания фильма
      * @param bindingResult результат валидации
      * @param model модель
      */
     @PostMapping("/create")
-    public String createMovie(@Valid @ModelAttribute("movie") CreateMovieDTO createMovieDTO,
+    public String createMovie(@Valid @ModelAttribute("movie") CreateEditMovieDTO createEditMovieDTO,
                               BindingResult bindingResult,
                               Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("movie", createMovieDTO);
+            model.addAttribute("movie", createEditMovieDTO);
             return "admin/movie/adminCreateMovie";
         }
 
         try {
-            movieService.createMovieFromDTO(createMovieDTO);
+            movieService.createMovieFromDTO(createEditMovieDTO);
         } catch (MovieAlreadyExistsException e) {
             model.addAttribute("error", e.getMessage());
             return "admin/movie/adminCreateMovie";
@@ -77,7 +76,7 @@ public class AdminMovieViewController {
     @GetMapping("/edit/{id}")
     public String editMovie(@PathVariable Long id, Model model) {
         Movie movie = movieService.getMovieById(id);
-        EditMovieDTO movieDTO = movieMapper.mapToEditMovieDTO(movie);
+        CreateEditMovieDTO movieDTO = movieMapper.mapToCreateEditMovieDTO(movie);
         model.addAttribute("movie", movieDTO);
         return "admin/movie/adminEditMovie";
     }
@@ -92,7 +91,7 @@ public class AdminMovieViewController {
      */
     @PostMapping("/edit/{id}")
     public String editMovie(@PathVariable Long id,
-                            @Valid @ModelAttribute("movie") EditMovieDTO movieDTO,
+                            @Valid @ModelAttribute("movie") CreateEditMovieDTO movieDTO,
                             BindingResult bindingResult,
                             Model model) {
         if (bindingResult.hasErrors()) {
