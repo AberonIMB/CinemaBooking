@@ -5,6 +5,9 @@ import com.cinema.cinemabooking.dto.session.EditSessionDTO;
 import com.cinema.cinemabooking.dto.session.CreateSessionDTO;
 import com.cinema.cinemabooking.dto.session.SessionCreateData;
 import com.cinema.cinemabooking.dto.session.SessionUpdateData;
+import com.cinema.cinemabooking.exception.session.CancelSessionWithActiveBookingsException;
+import com.cinema.cinemabooking.exception.session.SessionAlreadyFinishedException;
+import com.cinema.cinemabooking.exception.session.SessionNotFoundException;
 import com.cinema.cinemabooking.mapper.interfaces.HallMapper;
 import com.cinema.cinemabooking.mapper.interfaces.SessionMapper;
 import com.cinema.cinemabooking.model.Session;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -134,6 +138,23 @@ public class AdminSessionViewController {
         }
 
         return "redirect:/admin/sessions";
+    }
+
+    @PostMapping("cancel/{id}")
+    public String cancelSession(@PathVariable Long id, RedirectAttributes redirect) {
+        try {
+            Session session = sessionService.getSessionById(id);
+            sessionService.cancelSession(session);
+            return "redirect:/admin/sessions";
+        } catch (CancelSessionWithActiveBookingsException e) {
+            Session session = sessionService.getSessionById(id);
+            EditSessionDTO sessionDTO = sessionMapper.mapToEditSessionDTO(session);
+            redirect.addFlashAttribute("cancelError", e.getMessage());
+            return "redirect:/admin/sessions/edit/" + id;
+        } catch (SessionNotFoundException | SessionAlreadyFinishedException e) {
+            redirect.addFlashAttribute("error", e.getMessage());
+            return "redirect:/admin/sessions";
+        }
     }
 
     /**

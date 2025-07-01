@@ -25,6 +25,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public void saveAll(List<Movie> movies) {
+        movieRepository.saveAll(movies);
+    }
+
+    @Override
     public void createMovieFromDTO(CreateEditMovieDTO createEditMovieDTO) {
         if (movieRepository.findByTitle(createEditMovieDTO.getTitle()) != null) {
             throw new MovieAlreadyExistsException(createEditMovieDTO.getTitle());
@@ -85,5 +90,10 @@ public class MovieServiceImpl implements MovieService {
     public void deactivateMovie(Movie movie) {
         movie.setActive(false);
         movieRepository.save(movie);
+    }
+
+    @Override
+    public List<Movie> getActiveMoviesWithoutActiveSessions() {
+        return movieRepository.findActiveMoviesWithoutActiveSessions();
     }
 }

@@ -20,15 +20,24 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     /**
      * Проверяет существование брони по сеансу и статусу
      * @param session Сеанс
-     * @param statuses статусы брони
      */
-    boolean existsBySessionAndStatusIn(Session session, List<BookingStatus> statuses);
+    boolean existsBySessionAndStatusNot(Session session, BookingStatus status);
 
-    List<Booking> findBySessionAndSeatIn(Session session, List<Seat> seat);
+    List<Booking> findBySessionAndStatusNotAndSeatIn(Session session, BookingStatus status, List<Seat> seat);
 
     List<Booking> findByUserAndStatusIn(User user, List<BookingStatus> statuses);
 
     List<Booking> findAllByUserAndIdIn(User user, List<Long> bookingIds);
 
-    List<Booking> findBySession(Session session);
+    List<Booking> findBySessionAndStatusNot(Session session, BookingStatus status);
+
+    @Query("SELECT b FROM Booking b " +
+            "WHERE (:movieTitle IS NULL OR LOWER(b.session.movie.title) LIKE LOWER(CONCAT('%', :movieTitle, '%'))) " +
+            "AND (:date IS NULL OR FUNCTION('DATE', b.session.startTime) =:date) " +
+            "AND (:status IS NULL OR b.status = :status) " +
+            "AND (:email IS NULL OR b.user.email = :email)")
+    List<Booking> findBookingsByFilters(@Param("movieTitle") String movieTitle,
+                                        @Param("date") LocalDate date,
+                                        @Param("status") BookingStatus status,
+                                        @Param("email") String email);
 }

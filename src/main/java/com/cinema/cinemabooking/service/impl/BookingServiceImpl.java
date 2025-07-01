@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public boolean hasSessionActiveBooking(Session session) {
-        return bookingRepository.existsBySessionAndStatusIn(session, List.of(BookingStatus.BOOKED, BookingStatus.PAID));
+        return bookingRepository.existsBySessionAndStatusNot(session, BookingStatus.CANCELLED);
     }
 
     @Override
@@ -57,8 +58,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getBookings(Session session) {
-        return bookingRepository.findBySession(session);
+    public List<Booking> getActiveBookingsForSession(Session session) {
+        return bookingRepository.findBySessionAndStatusNot(session, BookingStatus.CANCELLED);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class BookingServiceImpl implements BookingService {
                 .map(seatService::getSeatById)
                 .toList();
 
-        List<Booking> bookings = bookingRepository.findBySessionAndSeatIn(session, seats);
+        List<Booking> bookings = bookingRepository.findBySessionAndStatusNotAndSeatIn(session, BookingStatus.CANCELLED, seats);
 
         if (!bookings.isEmpty()) {
             throw new SeatAlreadyBookedException(bookings.get(0).getSeat());
@@ -112,11 +113,20 @@ public class BookingServiceImpl implements BookingService {
                         "а я не реализовал работу с оплатой");
             }
 
+            if (booking.getStatus() == BookingStatus.CANCELLED) {
+                throw new BookingCancellationException("Невозможно отменить бронь, так как она уже отменена");
+            }
+
             if (booking.getStatus() != BookingStatus.BOOKED) {
                 throw new BookingCancellationException("Невозможно отменить бронь, так как сеанс уже завершен");
             }
-        }
 
-        bookingRepository.deleteAll(bookings);
+            updateBookingStatus(booking, BookingStatus.CANCELLED);
+        }
+    }
+
+    @Override
+    public List<Booking> getBookingsByFilters(String movieTitle, LocalDate date, BookingStatus status, String email) {
+        return bookingRepository.findBookingsByFilters(movieTitle, date, status, email);
     }
 }

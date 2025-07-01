@@ -67,8 +67,8 @@ public class SessionViewController {
             return "redirect:/schedule";
         } catch (SeatAlreadyBookedException e) {
             Session session = sessionService.getSessionById(id);
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("bookingSession", sessionDetailsService.getSessionDetails(session));
+            redirect.addFlashAttribute("error", e.getMessage());
+            redirect.addFlashAttribute("bookingSession", sessionDetailsService.getSessionDetails(session));
             return "redirect:/sessions/{id}";
         }
     }

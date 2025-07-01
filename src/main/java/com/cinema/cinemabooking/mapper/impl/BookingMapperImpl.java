@@ -1,5 +1,6 @@
 package com.cinema.cinemabooking.mapper.impl;
 
+import com.cinema.cinemabooking.dto.booking.AdminUserInfoBookingDTO;
 import com.cinema.cinemabooking.dto.booking.UserInfoBookingDTO;
 import com.cinema.cinemabooking.mapper.interfaces.BookingMapper;
 import com.cinema.cinemabooking.model.Booking;
@@ -12,6 +13,13 @@ import java.util.List;
 
 @Component
 public class BookingMapperImpl implements BookingMapper {
+
+    @Override
+    public List<UserInfoBookingDTO> mapToUserInfoBookingDTOList(List<Booking> bookings) {
+        return bookings.stream()
+                .map(this::mapToUserInfoBookingDTO)
+                .toList();
+    }
 
     @Override
     public UserInfoBookingDTO mapToUserInfoBookingDTO(Booking booking) {
@@ -36,9 +44,32 @@ public class BookingMapperImpl implements BookingMapper {
     }
 
     @Override
-    public List<UserInfoBookingDTO> mapToUserInfoBookingDTOList(List<Booking> bookings) {
+    public List<AdminUserInfoBookingDTO> mapToAdminUserInfoBookingDTOList(List<Booking> bookings) {
         return bookings.stream()
-                .map(this::mapToUserInfoBookingDTO)
+                .map(this::mapToAdminUserInfoBookingDTO)
                 .toList();
+    }
+
+    @Override
+    public AdminUserInfoBookingDTO mapToAdminUserInfoBookingDTO(Booking booking) {
+        AdminUserInfoBookingDTO bookingDTO = new AdminUserInfoBookingDTO();
+
+        Session session = booking.getSession();
+        Seat seat = booking.getSeat();
+        Hall hall = seat.getHall();
+
+        bookingDTO.setId(booking.getId());
+        bookingDTO.setEmail(booking.getUser().getEmail());
+        bookingDTO.setMovieTitle(session.getMovie().getTitle());
+        bookingDTO.setSessionDate(session.getStartTime().toLocalDate());
+        bookingDTO.setSessionTime(session.getStartTime().toLocalTime());
+        bookingDTO.setBookingTime(booking.getBookingTime());
+        bookingDTO.setHallName(hall.getName());
+        bookingDTO.setRowNumber(seat.getSeatRow());
+        bookingDTO.setSeatNumber(seat.getSeatNumber());
+        bookingDTO.setPrice(session.getPrice());
+        bookingDTO.setStatus(booking.getStatus());
+
+        return bookingDTO;
     }
 }

@@ -53,4 +53,8 @@ public interface MovieService {
      * @param movie фильм
      */
     void deactivateMovie(Movie movie);
+
+    List<Movie> getActiveMoviesWithoutActiveSessions();
+
+    void saveAll(List<Movie> movies);
 }

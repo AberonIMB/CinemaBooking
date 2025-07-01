@@ -2,6 +2,7 @@ package com.cinema.cinemabooking.repository;
 
 import com.cinema.cinemabooking.model.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -27,4 +28,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
      * @param title часть названия
      */
     List<Movie> findByTitleContainingIgnoreCase(String title);
+
+    @Query("SELECT m FROM Movie m WHERE m.isActive = true " +
+            "AND NOT EXISTS (SELECT s FROM Session s WHERE s.movie = m AND s.isActive = true)")
+    List<Movie> findActiveMoviesWithoutActiveSessions();
 }
