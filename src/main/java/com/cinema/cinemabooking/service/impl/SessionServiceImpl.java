@@ -1,13 +1,9 @@
 package com.cinema.cinemabooking.service.impl;
 
-import com.cinema.cinemabooking.dto.session.AdminSessionDTO;
 import com.cinema.cinemabooking.dto.session.SessionCreateData;
 import com.cinema.cinemabooking.dto.session.SessionUpdateData;
 import com.cinema.cinemabooking.exception.hall.HallIsNotActiveException;
-import com.cinema.cinemabooking.exception.session.ActiveBookingsExistException;
-import com.cinema.cinemabooking.exception.session.SessionAlreadyFinishedException;
-import com.cinema.cinemabooking.exception.session.SessionNotFoundException;
-import com.cinema.cinemabooking.exception.session.SessionOverlapException;
+import com.cinema.cinemabooking.exception.session.*;
 import com.cinema.cinemabooking.model.Hall;
 import com.cinema.cinemabooking.model.Movie;
 import com.cinema.cinemabooking.model.Session;
@@ -60,13 +56,6 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void updateSessionStatus(Session session, boolean status) {
-
-        session.setActive(status);
-        sessionRepository.save(session);
-    }
-
-    @Override
     public Session getSessionById(Long id) {
         Session session =  sessionRepository.findById(id)
                 .orElseThrow(() -> new SessionNotFoundException(id));
@@ -90,16 +79,36 @@ public class SessionServiceImpl implements SessionService {
 
         Session session = new Session(sessionStartTime, sessionData.getMovie(), hall, sessionData.getPrice());
         sessionRepository.save(session);
-        movieService.activateMovie(session.getMovie());
+
+        if (!session.getMovie().isActive()) {
+            movieService.activateMovie(session.getMovie());
+        }
     }
 
     @Override
     public List<Session> findSessionsByFilters(String movieTitle, Long hallId, LocalDate date) {
         return sessionRepository.findSessionsByFilters(movieTitle, hallId, date)
                 .stream()
-                .sorted(Comparator.comparing(Session::isActive).reversed())
+                .sorted(Comparator.comparing(Session::getStartTime).reversed())
                 .toList();
     }
+
+    @Override
+    public void cancelSession(Session session) {
+        if (bookingService.hasSessionActiveBooking(session)) {
+            throw new CancelSessionWithActiveBookingsException();
+        }
+
+        updateSessionStatus(session, false);
+    }
+
+    @Override
+    public void updateSessionStatus(Session session, boolean status) {
+        session.setActive(status);
+        sessionRepository.save(session);
+    }
+
+
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -110,7 +119,7 @@ public class SessionServiceImpl implements SessionService {
         boolean hasActiveBooking = bookingService.hasSessionActiveBooking(session);
 
         if (hasActiveBooking) {
-            throw new ActiveBookingsExistException(session);
+            throw new EditSessionWithActiveBookingsException(session);
         }
 
         validateSessionTimeNotOverlap(data.getHall(),
@@ -122,7 +131,10 @@ public class SessionServiceImpl implements SessionService {
         session.update(data);
 
         sessionRepository.save(session);
-        movieService.activateMovie(session.getMovie());
+
+        if (!session.getMovie().isActive()) {
+            movieService.activateMovie(session.getMovie());
+        }
     }
 
     /**

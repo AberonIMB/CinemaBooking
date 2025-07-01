@@ -5,6 +5,7 @@ import com.cinema.cinemabooking.model.Session;
 import com.cinema.cinemabooking.model.User;
 import com.cinema.cinemabooking.model.enums.BookingStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,7 +29,9 @@ public interface BookingService {
 
     void updateBookingStatus(Booking booking, BookingStatus status);
 
-    List<Booking> getBookings(Session session);
+    List<Booking> getActiveBookingsForSession(Session session);
 
     void payBooking(Long id, User user);
+
+    List<Booking> getBookingsByFilters(String movieTitle, LocalDate date, BookingStatus status, String email);
 }

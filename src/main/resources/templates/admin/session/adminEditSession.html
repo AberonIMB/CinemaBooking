@@ -44,7 +44,7 @@
 
     <div class="form-group">
         <label for="time">Время:</label>
-        <input type="time" id="time" class="form-input" th:field="*{time}" step="600" required>
+        <input type="time" id="time" class="form-input" th:field="*{time}" required>
         <div class="error" th:if="${#fields.hasErrors('time')}" th:errors="*{time}"></div>
     </div>
 
@@ -61,6 +61,14 @@
 
     <div th:if="${error}" class="error">
         <p th:text="${error}"></p>
+    </div>
+</form>
+
+<form th:action="@{/admin/sessions/cancel/{id}(id=${id})}" method="post" style="margin-top: 5px;">
+    <button type="submit" class="btn btn-status deactivate">❌ Отменить сеанс</button>
+
+    <div th:if="${cancelError}" class="error">
+        <p th:text="${cancelError}"></p>
     </div>
 </form>
 

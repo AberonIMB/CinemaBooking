@@ -38,7 +38,7 @@ public class SessionDetailsServiceImpl implements SessionDetailsService {
         int seatsPerRow = hall.getSeatsInRow();
         List<Seat> hallSeats = seatService.getSeatsForHall(hall);
 
-        List<Booking> bookings = bookingService.getBookings(session);
+        List<Booking> bookings = bookingService.getActiveBookingsForSession(session);
         Set<Long> bookedSeatIds = bookings
                 .stream()
                 .map(booking -> booking.getSeat().getId())

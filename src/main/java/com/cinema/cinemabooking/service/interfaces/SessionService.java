@@ -53,4 +53,6 @@ public interface SessionService {
     List<Session> getSessionsByStatus(boolean status);
 
     void updateSessionStatus(Session session, boolean status);
+
+    void cancelSession(Session session);
 }

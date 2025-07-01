@@ -71,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>
                     ${session.active ? `<button class="btn btn-edit"
                     onclick="window.location.href='/admin/sessions/edit/${session.id}'">Редактировать</button>` : ''}
-
-                    <button class="btn btn-info">Информация</button>
                 </td>
             `;
             tableBody.appendChild(tr);
