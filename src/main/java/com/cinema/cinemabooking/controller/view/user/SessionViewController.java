@@ -2,9 +2,6 @@ package com.cinema.cinemabooking.controller.view.user;
 
 import com.cinema.cinemabooking.dto.booking.BookingRequestDTO;
 import com.cinema.cinemabooking.dto.booking.BookingSessionDTO;
-import com.cinema.cinemabooking.exception.booking.SeatAlreadyBookedException;
-import com.cinema.cinemabooking.exception.session.SessionAlreadyFinishedException;
-import com.cinema.cinemabooking.exception.session.SessionNotFoundException;
 import com.cinema.cinemabooking.model.Session;
 import com.cinema.cinemabooking.model.User;
 import com.cinema.cinemabooking.service.interfaces.BookingService;
@@ -19,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
+/**
+ * Контроллер для работы с сеансами
+ */
 @Controller
 @RequestMapping("/sessions")
 public class SessionViewController {
@@ -36,6 +36,10 @@ public class SessionViewController {
     private BookingService bookingService;
 
 
+    /**
+     * Отображает страницу сеанса
+     * @param id идентификатор сеанса
+     */
     @GetMapping("/{id}")
     public String getSession(@PathVariable Long id, Model model) {
         Session session = sessionService.getSessionById(id);
@@ -47,29 +51,24 @@ public class SessionViewController {
         return "user/session";
     }
 
+    /**
+     * бронирует сеанса
+     * @param id идентификатор сеанса
+     * @param bookingRequestDTO данные бронирования
+     */
     @PostMapping("/{id}")
     public String bookSession(@PathVariable Long id,
-                          @ModelAttribute BookingRequestDTO bookingRequestDTO,
-                          Principal principal,
-                          Model model,
-                          RedirectAttributes redirect) {
+                              @ModelAttribute BookingRequestDTO bookingRequestDTO,
+                              Principal principal,
+                              Model model,
+                              RedirectAttributes redirect) {
 
         User user = userService.getUserByEmail(principal.getName());
 
-        try {
-            Session session = sessionService.getSessionById(id);
-            bookingService.createBookings(session, bookingRequestDTO.getSelectedSeats(), user);
-            redirect.addFlashAttribute("bookingSession", sessionDetailsService.getSessionDetails(session));
-            redirect.addFlashAttribute("success", "Все места забронированы успешно");
-            return "redirect:/sessions/{id}";
-        } catch (SessionNotFoundException | SessionAlreadyFinishedException e) {
-            redirect.addFlashAttribute("error", e.getMessage());
-            return "redirect:/schedule";
-        } catch (SeatAlreadyBookedException e) {
-            Session session = sessionService.getSessionById(id);
-            redirect.addFlashAttribute("error", e.getMessage());
-            redirect.addFlashAttribute("bookingSession", sessionDetailsService.getSessionDetails(session));
-            return "redirect:/sessions/{id}";
-        }
+        Session session = sessionService.getSessionById(id);
+        bookingService.createBookings(session, bookingRequestDTO.getSelectedSeats(), user);
+        redirect.addFlashAttribute("bookingSession", sessionDetailsService.getSessionDetails(session));
+        redirect.addFlashAttribute("success", "Все места забронированы успешно");
+        return "redirect:/sessions/{id}";
     }
 }

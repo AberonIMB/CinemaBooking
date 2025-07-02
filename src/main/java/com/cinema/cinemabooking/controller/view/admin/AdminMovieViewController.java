@@ -1,7 +1,6 @@
 package com.cinema.cinemabooking.controller.view.admin;
 
 import com.cinema.cinemabooking.dto.movie.CreateEditMovieDTO;
-import com.cinema.cinemabooking.exception.movie.MovieAlreadyExistsException;
 import com.cinema.cinemabooking.mapper.interfaces.MovieMapper;
 import com.cinema.cinemabooking.model.Movie;
 import com.cinema.cinemabooking.service.interfaces.MovieService;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Контроллер для работы с фильмами
@@ -43,28 +43,21 @@ public class AdminMovieViewController {
     }
 
     /**
-     * Создает фильм из переданного DTO, если ошибок нет, то перенаправляет на страницу с фильмами,
-     * иначе добавляет ошибку на страницу
+     * Создает фильм из переданного DTO
      * @param createEditMovieDTO дто для создания фильма
      * @param bindingResult результат валидации
-     * @param model модель
      */
     @PostMapping("/create")
     public String createMovie(@Valid @ModelAttribute("movie") CreateEditMovieDTO createEditMovieDTO,
                               BindingResult bindingResult,
-                              Model model) {
+                              RedirectAttributes redirect) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("movie", createEditMovieDTO);
             return "admin/movie/adminCreateMovie";
         }
 
-        try {
-            movieService.createMovieFromDTO(createEditMovieDTO);
-        } catch (MovieAlreadyExistsException e) {
-            model.addAttribute("error", e.getMessage());
-            return "admin/movie/adminCreateMovie";
-        }
+        movieService.createMovieFromDTO(createEditMovieDTO);
 
+        redirect.addFlashAttribute("success", "Фильм успешно создан");
         return "redirect:/admin/movies";
     }
 
@@ -82,8 +75,7 @@ public class AdminMovieViewController {
     }
 
     /**
-     * Редактирует фильм, если ошибок нет, то перенаправляет на страницу с фильмами,
-     * иначе добавляет ошибку на страницу
+     * Редактирует фильм
      * @param id идентификатор редактируемого фильма
      * @param movieDTO дто для редактирования фильма
      * @param bindingResult результат валидации
@@ -93,20 +85,16 @@ public class AdminMovieViewController {
     public String editMovie(@PathVariable Long id,
                             @Valid @ModelAttribute("movie") CreateEditMovieDTO movieDTO,
                             BindingResult bindingResult,
+                            RedirectAttributes redirect,
                             Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("movie", movieDTO);
             return "admin/movie/adminEditMovie";
         }
 
-        try {
-            movieService.updateMovie(id, movieDTO);
-        } catch (RuntimeException e) {
-            model.addAttribute("movie", movieDTO);
-            model.addAttribute("error", e.getMessage());
-            return "admin/movie/adminEditMovie";
-        }
+        movieService.updateMovie(id, movieDTO);
 
+        redirect.addFlashAttribute("success", "Фильм успешно изменен");
         return "redirect:/admin/movies";
     }
 }

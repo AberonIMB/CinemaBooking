@@ -25,12 +25,9 @@ public class HallController {
     /**
      * Получить список всех залов
      */
-    @GetMapping("")
+    @GetMapping
     public List<ShortHallDTO> getHalls() {
-        return hallService.getHalls()
-                .stream()
-                .map(hallMapper::mapToShortHallDTO)
-                .toList();
+        return hallMapper.mapToShortHallDTOList(hallService.getHalls());
     }
 
     /**
@@ -38,10 +35,7 @@ public class HallController {
      */
     @GetMapping("/active")
     public List<AdminHallDTO> getActiveHalls() {
-        return hallService.getHallsByActive(true)
-                .stream()
-                .map(hallMapper::mapToAdminHallDTO)
-                .toList();
+        return hallMapper.mapToAdminHallDTOList(hallService.getHallsByActive(true));
     }
 
     /**
@@ -49,9 +43,6 @@ public class HallController {
      */
     @GetMapping("/inactive")
     public List<AdminHallDTO> getInactiveHalls() {
-        return hallService.getHallsByActive(false)
-                .stream()
-                .map(hallMapper::mapToAdminHallDTO)
-                .toList();
+        return hallMapper.mapToAdminHallDTOList(hallService.getHallsByActive(false));
     }
 }

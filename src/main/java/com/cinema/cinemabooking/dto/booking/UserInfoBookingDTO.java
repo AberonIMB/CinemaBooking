@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * DTO для отображения информации о своих бронированиях
+ */
 public class UserInfoBookingDTO {
 
     private Long id;

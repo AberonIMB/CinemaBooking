@@ -2,7 +2,7 @@ package com.cinema.cinemabooking.service.impl;
 
 import com.cinema.cinemabooking.dto.session.SessionCreateData;
 import com.cinema.cinemabooking.dto.session.SessionUpdateData;
-import com.cinema.cinemabooking.exception.hall.HallIsNotActiveException;
+import com.cinema.cinemabooking.exception.session.HallIsNotActiveException;
 import com.cinema.cinemabooking.exception.session.*;
 import com.cinema.cinemabooking.model.Hall;
 import com.cinema.cinemabooking.model.Movie;
@@ -103,6 +103,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    @Transactional
     public void updateSessionStatus(Session session, boolean status) {
         session.setActive(status);
         sessionRepository.save(session);

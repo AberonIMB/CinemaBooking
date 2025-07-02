@@ -7,8 +7,24 @@ import com.cinema.cinemabooking.mapper.interfaces.HallMapper;
 import com.cinema.cinemabooking.model.Hall;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class HallMapperImpl implements HallMapper {
+
+    @Override
+    public List<ShortHallDTO> mapToShortHallDTOList(List<Hall> hallList) {
+        return hallList.stream()
+                .map(this::mapToShortHallDTO)
+                .toList();
+    }
+
+    @Override
+    public List<AdminHallDTO> mapToAdminHallDTOList(List<Hall> hallList) {
+        return hallList.stream()
+                .map(this::mapToAdminHallDTO)
+                .toList();
+    }
 
     @Override
     public ShortHallDTO mapToShortHallDTO(Hall hall) {

@@ -1,6 +1,6 @@
 /* Общий фон и базовая типографика */
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: "Roboto", "Arial", sans-serif;
     background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
     color: #333;
     margin: 0;

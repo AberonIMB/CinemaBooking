@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * DTO для отображения сеанса и его бронирований
+ */
 public class BookingSessionDTO {
 
     private String movieTitle;

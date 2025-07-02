@@ -52,11 +52,22 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
                                          @Param("hallId") Long hallId,
                                          @Param("date") LocalDate date);
 
+    /**
+     * Поиск активных сеансов по дате
+     * @param date дата
+     * @return Список сеансов
+     */
     @Query("SELECT s FROM Session s " +
             "WHERE s.isActive = true " +
             "AND FUNCTION('DATE', s.startTime) = :date")
     List<Session> findActiveSessionsByDate(@Param("date") LocalDate date);
 
+    /**
+     * Поиск активных сеансов по фильму и дате
+     * @param movie фильм
+     * @param date дата
+     * @return Список сеансов
+     */
     @Query("SELECT s FROM Session s " +
             "WHERE s.movie = :movie " +
             "AND s.isActive = true " +
@@ -64,5 +75,10 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     List<Session> findActiveSessionsByMovieAndDate(@Param("movie") Movie movie,
                                                    @Param("date") LocalDate date);
 
+    /**
+     * Поиск сеансов по статусу
+     * @param isActive статус
+     * @return Список сеансов
+     */
     List<Session> findByIsActive(boolean isActive);
 }

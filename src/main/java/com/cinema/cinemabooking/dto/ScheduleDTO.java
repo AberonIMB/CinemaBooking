@@ -5,6 +5,9 @@ import com.cinema.cinemabooking.dto.session.ScheduleSessionDTO;
 
 import java.util.List;
 
+/**
+ * DTO для отображения расписания
+ */
 public class ScheduleDTO {
 
     private ScheduleMovieDTO movieDTO;

@@ -10,6 +10,16 @@
 <div th:replace="~{admin/fragments/adminNavigation :: adminNavbar}"></div>
 <h1>Управление фильмами</h1>
 
+<div class="result-container">
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${success}" class="success">
+        <p th:text="${success}"></p>
+    </div>
+</div>
+
 <div class="controllers">
     <button class="btn btn-info" onclick="loadMovies(true)">✅ Активные фильмы</button>
     <button class="btn btn-info" onclick="loadMovies(false)">❌ Неактивные фильмы</button>

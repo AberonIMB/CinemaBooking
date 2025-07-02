@@ -12,6 +12,16 @@
 
 <h1>Управление залами</h1>
 
+<div class="result-container">
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${success}" class="success">
+        <p th:text="${success}"></p>
+    </div>
+</div>
+
 <div class="controllers">
     <button class="btn btn-info" onclick="loadHalls(true)">✅ Активные залы</button>
     <button class="btn btn-info" onclick="loadHalls(false)">❌ Неактивные залы</button>

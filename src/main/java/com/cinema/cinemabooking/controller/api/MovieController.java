@@ -27,10 +27,7 @@ public class MovieController {
      */
     @GetMapping("/active")
     public List<AdminMovieDTO> getActiveMovies() {
-        return movieService.getMoviesByActive(true)
-                .stream()
-                .map(movieMapper::mapToAdminMovieDTO)
-                .toList();
+        return movieMapper.mapToAdminMovieDTOList(movieService.getMoviesByActive(true));
     }
 
     /**
@@ -38,21 +35,15 @@ public class MovieController {
      */
     @GetMapping("/inactive")
     public List<AdminMovieDTO> getInactiveMovies() {
-        return movieService.getMoviesByActive(false)
-                .stream()
-                .map(movieMapper::mapToAdminMovieDTO)
-                .toList();
+        return movieMapper.mapToAdminMovieDTOList(movieService.getMoviesByActive(false));
     }
 
     /**
      * Получить список фильмов по названию
-     * @param title кусок названия фильма
+     * @param title часть названия фильма
      */
     @GetMapping("/search")
     public List<ShortMovieDTO> searchMovies(@RequestParam("title") String title) {
-        return movieService.searchMoviesByTitle(title)
-                .stream()
-                .map(movieMapper::mapToShortMovieDTO)
-                .toList();
+        return movieMapper.mapToShortMovieDTOList(movieService.getMoviesByTitle(title));
     }
 }

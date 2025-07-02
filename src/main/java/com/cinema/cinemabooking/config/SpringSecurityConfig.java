@@ -24,16 +24,13 @@ public class SpringSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Конфигурация SecurityFilterChain
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-//                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/css/**","/js/**", "/images/**", "/api/**",
-                                "/auth/login", "/auth/registration", "/schedule", "/movies", "/movie/**", "/")
+                                "/auth/login", "/auth/registration", "/schedule", "/movies", "/movies/*", "/")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

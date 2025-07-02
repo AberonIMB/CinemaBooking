@@ -39,6 +39,9 @@ public class Hall {
     @OneToMany(mappedBy = "hall")
     private List<Seat> seats;
 
+    /**
+     * Активен ли кинозал
+     */
     private boolean isActive = true;
 
     public Hall(String name, int numberOfRows, int seatsInRow) {

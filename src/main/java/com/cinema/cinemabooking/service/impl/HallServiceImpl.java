@@ -11,9 +11,10 @@ import com.cinema.cinemabooking.repository.HallRepository;
 import com.cinema.cinemabooking.service.interfaces.HallService;
 import com.cinema.cinemabooking.service.interfaces.SeatService;
 import com.cinema.cinemabooking.service.interfaces.SessionService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void createHallFromDTO(CreateHallDTO createHallDTO) {
         String name = createHallDTO.getName().trim();
         if (hallRepository.existsByName(name)) {
@@ -62,7 +63,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void updateHall(Long id, EditHallDTO hallDTO) {
         Hall hall = hallRepository.findById(id).orElseThrow(() -> new HallNotFoundException(id));
         Hall existingHall = hallRepository.getHallByName(hallDTO.getName());
@@ -90,6 +91,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
+    @Transactional
     public void deactivateHall(Long id) {
         Hall hall = hallRepository.findById(id).orElseThrow(() -> new HallNotFoundException(id));
 
@@ -104,6 +106,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
+    @Transactional
     public void activateHall(Long id) {
         Hall hall = hallRepository.findById(id).orElseThrow(() -> new HallNotFoundException(id));
         hall.setActive(true);

@@ -5,9 +5,9 @@ import com.cinema.cinemabooking.model.Hall;
 import com.cinema.cinemabooking.model.Seat;
 import com.cinema.cinemabooking.repository.SeatRepository;
 import com.cinema.cinemabooking.service.interfaces.SeatService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ public class SeatServiceImpl implements SeatService {
     private SeatRepository seatRepository;
 
     @Override
+    @Transactional
     public void createSeatsForHall(Hall hall) {
         List<Seat> seats = new ArrayList<>(hall.getSeatsInRow() * hall.getNumberOfRows());
 
@@ -49,13 +50,8 @@ public class SeatServiceImpl implements SeatService {
         return seatRepository.findById(id).orElseThrow(() -> new SeatNotFoundException(id));
     }
 
-//    @Override
-//    public List<Seat> getSeatsByIds(List<Long> ids) {
-//        return seatRepository.findByIdIn(ids);
-//    }
-
     /**
-     * Переводит все места из активного состояния в неактивное
+     * Переводит все места зала из активного состояния в неактивное
      * @param hall зал
      */
     private void deactivateSeatsForHall(Hall hall) {

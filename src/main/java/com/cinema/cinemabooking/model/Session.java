@@ -46,6 +46,9 @@ public class Session {
      */
     private double price;
 
+    /**
+     * Активен ли сеанс
+     */
     private boolean isActive = true;
 
     public Session(LocalDateTime startTime, Movie movie, Hall hall, double price) {

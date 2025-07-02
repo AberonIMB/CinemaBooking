@@ -28,12 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
         sessions.forEach(session => {
             const sessionDiv = document.createElement('div');
             sessionDiv.classList.add('session-item');
+
             sessionDiv.innerHTML = `
-                <p><strong>Зал:</strong> ${session.hallName}</p>
-                <p><strong>Время:</strong> ${session.time}</p>
-                <p><strong>Цена:</strong> ${session.price}₽</p>
+                <a href="/sessions/${session.id}" class="session-link">
+                    <p><strong>Зал:</strong> ${session.hallName}</p>
+                    <p><strong>Время:</strong> ${session.time}</p>
+                    <p><strong>Цена:</strong> ${session.price}₽</p>
+                </a>
                 <hr>
             `;
+
             scheduleSection.appendChild(sessionDiv);
         });
     }
