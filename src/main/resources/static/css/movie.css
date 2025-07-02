@@ -1,0 +1,126 @@
+body {
+    font-family: "Roboto", "Arial", sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container, .movie-details, .schedule-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+h1, h2 {
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.movie-details {
+    display: flex;
+    gap: 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.movie-details img.poster {
+    width: 250px;
+    height: 375px; /* соотношение примерно 2:3 */
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.movie-details .info {
+    flex: 1;
+    color: #555;
+}
+
+.movie-details .info p {
+    margin: 0.4rem 0;
+}
+
+.movie-details .info p strong {
+    color: #2c3e50;
+}
+
+.movie-details .description {
+    margin-top: 1rem;
+    font-style: italic;
+    color: #6c757d;
+}
+
+/* Секция расписания */
+.schedule-section {
+    margin-top: 3rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.schedule-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.form-input {
+    width: 200px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 2px 8px rgba(52,152,219,0.3);
+}
+
+#scheduleContainer, #scheduleResults {
+    margin-top: 1.5rem;
+}
+
+#scheduleResults {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.session-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease;
+}
+
+.session-item:hover {
+    background: #e9ecef;
+}
+
+.session-item p {
+    margin: 0.3rem 0;
+    color: #333;
+}
+
+.session-item strong {
+    color: #2c3e50;
+}
+
+.session-link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+}

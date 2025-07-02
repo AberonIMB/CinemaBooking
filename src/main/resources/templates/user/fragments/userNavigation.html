@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="userNavigation" class="userNavigation">
+    <div class="logo">
+        <a th:href="@{/}">🎬 CinemaBooking</a>
+    </div>
+
+    <ul class="nav-links">
+        <li><a th:href="@{/schedule}">Расписание</a></li>
+        <li><a th:href="@{/movies}">Фильмы</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <a th:href="@{/admin}">Админ-панель</a>
+        </li>
+    </ul>
+
+    <div class="user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
+        <div class="dropdown">
+            <button class="dropbtn">Мой кабинет ⮟</button>
+            <div class="dropdown-content">
+                <a th:href="@{/bookings/my}">Мои бронирования</a>
+                <form th:action="@{/auth/logout}" method="post">
+                    <button type="submit" class="logout-button">Выйти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-links" th:if="${#authorization.expression('isAnonymous()')}">
+        <a th:href="@{/login}">Войти</a>
+    </div>
+</nav>
+</body>
+</html>

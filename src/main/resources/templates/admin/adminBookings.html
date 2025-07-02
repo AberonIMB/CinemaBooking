@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Бронирования</title>
+    <link rel="stylesheet" href="/css/admin-style.css">
+</head>
+<body>
+
+    <div th:replace="~{admin/fragments/adminNavigation :: adminNavbar}"></div>
+
+    <h1>Список бронирований</h1>
+
+    <div class="filter-section">
+        <div class="filter-inputs">
+            <input type="text" id="emailFilter" name="email" class="form-input" placeholder="Email пользователя">
+            <input type="text" id="movieFilter" class="form-input" placeholder="Введите название фильма" autocomplete="off">
+
+            <select name="status" class="form-input">
+                <option value="">Все статусы</option>
+                <option value="BOOKED">BOOKED</option>
+                <option value="PAID">PAID</option>
+                <option value="CANCELLED">CANCELLED</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="EXPIRED">EXPIRED</option>
+            </select>
+
+            <input type="date" id="dateFilter" class="form-input"
+                   th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+        </div>
+
+        <div class="controllers">
+            <button type="button" class="btn btn-info" id="btnFilter">🔍 Применить фильтры</button>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Фильм</th>
+            <th>Дата сеанса</th>
+            <th>Время сеанса</th>
+            <th>Зал</th>
+            <th>Ряд</th>
+            <th>Место</th>
+            <th>Цена</th>
+            <th>Время бронирования</th>
+            <th>Статус</th>
+        </tr>
+        </thead>
+        <tbody id="bookingTableBody"></tbody>
+    </table>
+
+<script src="/js/adminBookings.js"></script>
+</body>
+</html>

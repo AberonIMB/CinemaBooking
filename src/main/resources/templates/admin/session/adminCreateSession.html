@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание сеанса</title>
+    <link rel="stylesheet" href="/css/admin-style.css">
+    <script src="/js/adminCreateSession.js"></script>
+</head>
+<body>
+
+<div th:replace="~{admin/fragments/adminNavigation :: adminNavbar}"></div>
+<h1>Создание нового сеанса</h1>
+
+<form class="form-entity" th:action="@{/admin/sessions/create}" th:object="${session}" method="post">
+
+    <div class="form-group">
+        <label for="movieSearch">Фильм:</label>
+        <input type="text" id="movieSearch" class="form-input" placeholder="Начните вводить название..." autocomplete="off" required>
+        <input type="hidden" id="movieId" name="movieId" th:field="*{movieId}">
+        <div class="error" th:if="${#fields.hasErrors('movieId')}" th:errors="*{movieId}"></div>
+        <ul id="suggestions" class="autocomplete-list"></ul>
+    </div>
+
+    <div class="form-group">
+        <label for="hall">Зал:</label>
+        <select id="hall" name="hallId" class="form-input" required>
+            <option value="" disabled selected>Выберите зал</option>
+            <option th:each="hall : ${halls}"
+                    th:value="${hall.id}"
+                    th:text="${hall.name}">
+            </option>
+        </select>
+        <div class="error" th:if="${#fields.hasErrors('hallId')}" th:errors="*{hallId}"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="date">Дата:</label>
+        <input type="date" id="date" class="form-input" th:field="*{date}" required>
+        <div class="error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="time">Время:</label>
+        <input type="time" id="time" class="form-input" th:field="*{time}" step="600" required>
+        <div class="error" th:if="${#fields.hasErrors('time')}" th:errors="*{time}"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Цена:</label>
+        <input type="number" id="price" class="form-input" th:field="*{price}" min="0" step="1" required>
+        <div class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+    </div>
+
+    <div class="form-buttons">
+        <button type="submit" class="btn btn-save">💾 Создать</button>
+        <a href="/admin/sessions"><button type="button" class="btn btn-back">↩ Назад</button></a>
+    </div>
+
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+</form>
+
+</body>
+</html>

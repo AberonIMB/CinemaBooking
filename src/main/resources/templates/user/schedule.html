@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание</title>
+    <link rel="stylesheet" href="/css/navigation.css">
+    <link rel="stylesheet" href="/css/schedule.css">
+</head>
+<body>
+<div th:replace="~{user/fragments/userNavigation :: userNavigation}"></div>
+
+<div class="container">
+    <h1>Расписание сеансов</h1>
+
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div class="filter-container">
+        <label for="dateFilter">Выберите дату:</label>
+        <input type="date" id="dateFilter" class="form-input"
+               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+    </div>
+
+    <div id="scheduleContainer" class="schedule-grid">
+        <!-- Контент будет загружен через JS -->
+    </div>
+</div>
+
+<script src="/js/schedule.js"></script>
+</body>
+</html>
