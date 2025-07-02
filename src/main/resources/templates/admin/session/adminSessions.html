@@ -11,6 +11,16 @@
 
 <h1>Управление сеансами</h1>
 
+<div class="result-container">
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${success}" class="success">
+        <p th:text="${success}"></p>
+    </div>
+</div>
+
 <div class="filter-section">
     <div class="filter-inputs">
         <input type="text" id="movieFilter" class="form-input" placeholder="Введите название фильма" autocomplete="off">

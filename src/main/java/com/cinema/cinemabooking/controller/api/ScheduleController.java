@@ -28,28 +28,29 @@ public class ScheduleController {
     /**
      * Получает расписание сеансов по дате
      * @param date дата
+     * @return список {@link ScheduleDTO}
      */
     @GetMapping
     public List<ScheduleDTO> getScheduleByDate(@RequestParam("date")
-                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                             LocalDate date) {
+                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                               LocalDate date) {
 
         return scheduleService.getScheduleByDate(date);
     }
 
     /**
-     * Получает расписание сеансов по фильму
+     * Получает расписание сеансов по фильму и дате
      * @param id идентификатор фильма
      * @param date дата
+     * @return список {@link ScheduleSessionDTO}
      */
     @GetMapping("/movie/{id}")
-    public List<ScheduleSessionDTO> getScheduleByMovie(@PathVariable Long id,
-                                                       @RequestParam("date")
-                                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                       LocalDate date) {
+    public List<ScheduleSessionDTO> getScheduleByMovieAndDate(@PathVariable Long id,
+                                                              @RequestParam("date")
+                                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                              LocalDate date) {
 
         Movie movie = movieService.getMovieById(id);
-
         return scheduleService.getScheduleByMovie(movie, date);
     }
 }

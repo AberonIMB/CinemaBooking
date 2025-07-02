@@ -23,7 +23,17 @@ public interface SeatService {
      */
     void updateSeatsForHall(Hall hall);
 
+    /**
+     * Получить список мест для зала
+     * @param hall зал
+     * @return список мест
+     */
     List<Seat> getSeatsForHall(Hall hall);
 
+    /**
+     * Получить место по идентификатору
+     * @param id идентификатор
+     * @return место
+     */
     Seat getSeatById(Long id);
 }

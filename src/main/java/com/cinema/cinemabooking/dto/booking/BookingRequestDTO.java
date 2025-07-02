@@ -2,6 +2,10 @@ package com.cinema.cinemabooking.dto.booking;
 
 import java.util.List;
 
+/**
+ * DTO для запроса на бронирования,
+ * содержит идентификатор сеанса и список идентификаторов мест для бронирования
+ */
 public class BookingRequestDTO {
 
     private Long sessionId;

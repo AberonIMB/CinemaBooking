@@ -5,6 +5,9 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
+/**
+ * Проверяет, что минуты кратны 10
+ */
 @Documented
 @Constraint(validatedBy = MinutesTensValidator.class)
 @Target({ElementType.FIELD})

@@ -14,7 +14,9 @@
     <div class="movie-grid">
         <div class="movie-card" th:each="movie : ${movies}">
             <a th:href="@{'/movies/' + ${movie.id}}">
-                <img src="/images/placeholder.jpeg" alt="Постер фильма" class="movie-poster">
+                <div class="movie-poster-wrapper">
+                    <img src="/images/placeholder.jpeg" alt="Постер фильма" class="movie-poster">
+                </div>
                 <h2 class="movie-title" th:text="${movie.title}">Название фильма</h2>
             </a>
         </div>

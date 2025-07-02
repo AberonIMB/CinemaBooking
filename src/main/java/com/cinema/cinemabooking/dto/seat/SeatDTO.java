@@ -2,6 +2,9 @@ package com.cinema.cinemabooking.dto.seat;
 
 import com.cinema.cinemabooking.model.Seat;
 
+/**
+ * DTO для отображения схемы зала и его бронирований, во время просмотра сеанса
+ */
 public class SeatDTO {
     private Long id;
     private int rowNumber;

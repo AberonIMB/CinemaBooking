@@ -5,29 +5,45 @@ import com.cinema.cinemabooking.dto.hall.EditHallDTO;
 import com.cinema.cinemabooking.dto.hall.ShortHallDTO;
 import com.cinema.cinemabooking.model.Hall;
 
+import java.util.List;
+
 /**
  * Маппер для залов
  */
 public interface HallMapper {
 
     /**
-     * Конвертирует Зал в ShortHallDTO
+     * Конвертирует Зал в {@link ShortHallDTO}
      * @param hall зал
-     * @return ShortHallDTO краткая информация о зале
+     * @return {@link ShortHallDTO}
      */
     ShortHallDTO mapToShortHallDTO(Hall hall);
 
     /**
-     * Конвертирует Зал в AdminHallDTO
+     * Конвертирует Зал в {@link AdminHallDTO}
      * @param hall зал
-     * @return AdminHallDTO полная информация о зале
+     * @return {@link AdminHallDTO}
      */
     AdminHallDTO mapToAdminHallDTO(Hall hall);
 
     /**
-     * Конвертирует Зал в EditHallDTO
+     * Конвертирует Зал в {@link EditHallDTO}
      * @param hall зал
-     * @return EditHallDTO данные для редактирования зала
+     * @return {@link EditHallDTO}
      */
     EditHallDTO mapToEditHallDTO(Hall hall);
+
+    /**
+     * Конвертирует список Залов в список {@link ShortHallDTO}
+     * @param hallList список Залов
+     * @return список {@link ShortHallDTO}
+     */
+    List<ShortHallDTO> mapToShortHallDTOList(List<Hall> hallList);
+
+    /**
+     * Конвертирует список Залов в список {@link AdminHallDTO}
+     * @param hallList список Залов
+     * @return список {@link AdminHallDTO}
+     */
+    List<AdminHallDTO> mapToAdminHallDTOList(List<Hall> hallList);
 }

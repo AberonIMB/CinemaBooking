@@ -16,6 +16,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Планировщик, который обновляет статусы сеансов и все его зависимости
+ */
 @Component
 public class SessionStatusScheduler {
 
@@ -28,8 +31,14 @@ public class SessionStatusScheduler {
     @Autowired
     private MovieService movieService;
 
-//    @Scheduled(cron = "0 0/10 * * * *")
-    @Scheduled(fixedDelay = 60000)
+    /**
+     * Запускается, когда количество минут кратно 10,
+     * Сеансы, до которых остался 1 час становятся неактивными,
+     * Брони на эти сеансы становятся в статус "EXPIRED" или "COMPLETED"
+     * Фильмы, на которые нет сеансов, становятся неактивными
+     */
+    @Scheduled(cron = "0 0/10 * * * *")
+//    @Scheduled(fixedDelay = 60000)
     @Transactional
     public void updateeSessionStatus() {
         LocalDateTime now = LocalDateTime.now();
@@ -49,6 +58,10 @@ public class SessionStatusScheduler {
         updateMovieStatus();
     }
 
+    /**
+     * Обновляет статус броней
+     * @param session Сеанс
+     */
     private void updateBookingStatus(Session session) {
         List<Booking> bookings = bookingService.getActiveBookingsForSession(session);
         for (Booking booking : bookings) {
@@ -60,6 +73,9 @@ public class SessionStatusScheduler {
         }
     }
 
+    /**
+     * Обновляет статус фильмов
+     */
     private void updateMovieStatus() {
         List<Movie> moviesForDeactivation = movieService.getActiveMoviesWithoutActiveSessions();
 

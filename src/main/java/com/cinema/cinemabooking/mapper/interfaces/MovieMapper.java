@@ -6,31 +6,52 @@ import com.cinema.cinemabooking.dto.movie.ScheduleMovieDTO;
 import com.cinema.cinemabooking.dto.movie.ShortMovieDTO;
 import com.cinema.cinemabooking.model.Movie;
 
+import java.util.List;
+
 /**
  * Маппер для фильмов
  */
 public interface MovieMapper {
 
     /**
-     * Конвертирует фильм в AdminMovieDTO
+     * Конвертирует фильм в {@link AdminMovieDTO}
      * @param movie фильм
-     * @return AdminMovieDTO полная информация о фильме
+     * @return {@link AdminMovieDTO}
      */
     AdminMovieDTO mapToAdminMovieDTO(Movie movie);
 
     /**
-     * Конвертирует фильм в ShortMovieDTO
+     * Конвертирует фильм в {@link ShortMovieDTO}
      * @param movie фильм
-     * @return ShortMovieDTO краткая информация о фильме
+     * @return {@link ShortMovieDTO}
      */
     ShortMovieDTO mapToShortMovieDTO(Movie movie);
 
     /**
-     * Конвертирует фильм в EditMovieDTO
+     * Конвертирует фильм в {@link CreateEditMovieDTO}
      * @param movie фильм
-     * @return EditMovieDTO данные для редактирования фильма
+     * @return {@link CreateEditMovieDTO}
      */
     CreateEditMovieDTO mapToCreateEditMovieDTO(Movie movie);
 
+    /**
+     * Конвертирует фильм в {@link ScheduleMovieDTO}
+     * @param movie фильм
+     * @return {@link ScheduleMovieDTO@}
+     */
     ScheduleMovieDTO mapToScheduleMovieDTO(Movie movie);
+
+    /**
+     * Конвертирует список фильмов в список {@link AdminMovieDTO}
+     * @param movieList список фильмов
+     * @return список {@link AdminMovieDTO}
+     */
+    List<AdminMovieDTO> mapToAdminMovieDTOList(List<Movie> movieList);
+
+    /**
+     * Конвертирует список фильмов в список {@link ShortMovieDTO}
+     * @param movieList список фильмов
+     * @return список {@link ShortMovieDTO}
+     */
+    List<ShortMovieDTO> mapToShortMovieDTOList(List<Movie> movieList);
 }

@@ -5,9 +5,6 @@ import com.cinema.cinemabooking.dto.session.EditSessionDTO;
 import com.cinema.cinemabooking.dto.session.CreateSessionDTO;
 import com.cinema.cinemabooking.dto.session.SessionCreateData;
 import com.cinema.cinemabooking.dto.session.SessionUpdateData;
-import com.cinema.cinemabooking.exception.session.CancelSessionWithActiveBookingsException;
-import com.cinema.cinemabooking.exception.session.SessionAlreadyFinishedException;
-import com.cinema.cinemabooking.exception.session.SessionNotFoundException;
 import com.cinema.cinemabooking.mapper.interfaces.HallMapper;
 import com.cinema.cinemabooking.mapper.interfaces.SessionMapper;
 import com.cinema.cinemabooking.model.Session;
@@ -62,8 +59,7 @@ public class AdminSessionViewController {
     }
 
     /**
-     * Создает сеанс из переданного DTO, если ошибок нет, то перенаправляет на страницу с сеансами,
-     * иначе добавляет ошибку на страницу
+     * Создает сеанс из переданного DTO
      * @param createSessionDTO дто для создания сеанса
      * @param bindingResult результат валидации
      * @param model модель
@@ -79,15 +75,8 @@ public class AdminSessionViewController {
             return "admin/session/adminCreateSession";
         }
 
-        try {
-            SessionCreateData sessionData = sessionMapper.mapToCreateData(createSessionDTO);
-            sessionService.createSession(sessionData);
-        } catch (RuntimeException e) {
-            model.addAttribute("session", createSessionDTO);
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("halls", getActiveHalls());
-            return "admin/session/adminCreateSession";
-        }
+        SessionCreateData sessionData = sessionMapper.mapToCreateData(createSessionDTO);
+        sessionService.createSession(sessionData);
 
         return "redirect:/admin/sessions";
     }
@@ -102,15 +91,14 @@ public class AdminSessionViewController {
 
         Session session = sessionService.getSessionById(id);
         EditSessionDTO sessionDTO = sessionMapper.mapToEditSessionDTO(session);
-
         model.addAttribute("session", sessionDTO);
+
         model.addAttribute("halls", getActiveHalls());
         return "admin/session/adminEditSession";
     }
 
     /**
-     * Редактирует сеанс из переданного DTO, если ошибок нет, то перенаправляет на страницу с сеансами,
-     * иначе добавляет ошибку на страницу
+     * Редактирует сеанс из переданного DTO
      * @param id идентификатор редактируемого сеанса
      * @param sessionDTO дто для редактирования сеанса
      * @param bindingResult результат валидации
@@ -120,6 +108,7 @@ public class AdminSessionViewController {
     public String editSession(@PathVariable Long id,
                               @Valid @ModelAttribute("session") EditSessionDTO sessionDTO,
                               BindingResult bindingResult,
+                              RedirectAttributes redirect,
                               Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("session", sessionDTO);
@@ -127,34 +116,24 @@ public class AdminSessionViewController {
             return "admin/session/adminEditSession";
         }
 
-        try {
-            SessionUpdateData sessionUpdateData = sessionMapper.mapToUpdateData(sessionDTO);
-            sessionService.updateSession(sessionUpdateData);
-        } catch (RuntimeException e) {
-            model.addAttribute("session", sessionDTO);
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("halls", getActiveHalls());
-            return "admin/session/adminEditSession";
-        }
+        SessionUpdateData sessionUpdateData = sessionMapper.mapToUpdateData(sessionDTO);
+        sessionService.updateSession(sessionUpdateData);
 
+        redirect.addFlashAttribute("success", "Сеанс успешно изменен");
         return "redirect:/admin/sessions";
     }
 
+    /**
+     * Отменяет сеанс
+     * @param id идентификатор сеанса
+     */
     @PostMapping("cancel/{id}")
     public String cancelSession(@PathVariable Long id, RedirectAttributes redirect) {
-        try {
-            Session session = sessionService.getSessionById(id);
-            sessionService.cancelSession(session);
-            return "redirect:/admin/sessions";
-        } catch (CancelSessionWithActiveBookingsException e) {
-            Session session = sessionService.getSessionById(id);
-            EditSessionDTO sessionDTO = sessionMapper.mapToEditSessionDTO(session);
-            redirect.addFlashAttribute("cancelError", e.getMessage());
-            return "redirect:/admin/sessions/edit/" + id;
-        } catch (SessionNotFoundException | SessionAlreadyFinishedException e) {
-            redirect.addFlashAttribute("error", e.getMessage());
-            return "redirect:/admin/sessions";
-        }
+        Session session = sessionService.getSessionById(id);
+        sessionService.cancelSession(session);
+
+        redirect.addFlashAttribute("success", "Сеанс успешно отменен");
+        return "redirect:/admin/sessions";
     }
 
     /**

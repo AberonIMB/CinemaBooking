@@ -8,8 +8,25 @@ import com.cinema.cinemabooking.mapper.interfaces.MovieMapper;
 import com.cinema.cinemabooking.model.Movie;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class MovieMapperImpl implements MovieMapper {
+
+
+    @Override
+    public List<AdminMovieDTO> mapToAdminMovieDTOList(List<Movie> movieList) {
+        return movieList.stream()
+                .map(this::mapToAdminMovieDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ShortMovieDTO> mapToShortMovieDTOList(List<Movie> movieList) {
+        return movieList.stream()
+                .map(this::mapToShortMovieDTO)
+                .toList();
+    }
 
     @Override
     public AdminMovieDTO mapToAdminMovieDTO(Movie movie) {

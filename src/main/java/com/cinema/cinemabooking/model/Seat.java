@@ -28,6 +28,9 @@ public class Seat {
     @ManyToOne
     private Hall hall;
 
+    /**
+     * Активно ли место
+     */
     private boolean isActive = true;
 
     public Seat(int seatRow, int seatNumber, Hall hall) {

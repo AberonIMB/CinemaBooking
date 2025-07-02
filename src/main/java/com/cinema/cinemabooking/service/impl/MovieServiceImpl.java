@@ -7,9 +7,10 @@ import com.cinema.cinemabooking.exception.movie.MovieNotFoundException;
 import com.cinema.cinemabooking.model.Movie;
 import com.cinema.cinemabooking.repository.MovieRepository;
 import com.cinema.cinemabooking.service.interfaces.MovieService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,11 +26,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public void saveAll(List<Movie> movies) {
         movieRepository.saveAll(movies);
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void createMovieFromDTO(CreateEditMovieDTO createEditMovieDTO) {
         if (movieRepository.findByTitle(createEditMovieDTO.getTitle()) != null) {
             throw new MovieAlreadyExistsException(createEditMovieDTO.getTitle());
@@ -55,7 +58,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void updateMovie(Long id, CreateEditMovieDTO movieDTO) {
         Movie movie = movieRepository.findById(id).orElseThrow(
                 () -> new MovieNotFoundException(id));
@@ -76,19 +79,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> searchMoviesByTitle(String title) {
+    public List<Movie> getMoviesByTitle(String title) {
         return movieRepository.findByTitleContainingIgnoreCase(title);
     }
 
     @Override
+    @Transactional
     public void activateMovie(Movie movie) {
         movie.setActive(true);
-        movieRepository.save(movie);
-    }
-
-    @Override
-    public void deactivateMovie(Movie movie) {
-        movie.setActive(false);
         movieRepository.save(movie);
     }
 

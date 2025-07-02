@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
         scheduleContainer.innerHTML = "";
 
         if (scheduleData.length === 0) {
-            scheduleContainer.innerHTML = "<p>Нет сеансов на выбранную дату.</p>";
             return;
         }
 
@@ -38,8 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const movieBlock = document.createElement("div");
             movieBlock.className = "movie-block";
 
+            // Ссылка на фильм
             const movieHeader = document.createElement("h3");
-            movieHeader.textContent = `${entry.movieDTO.title} (${entry.movieDTO.duration} мин)`;
+            movieHeader.innerHTML = `<a href="/movies/${entry.movieDTO.id}" class="movie-link">
+                                        ${entry.movieDTO.title} (${entry.movieDTO.duration} мин)
+                                     </a>`;
 
             const genreList = document.createElement("p");
             genreList.textContent = `${entry.movieDTO.genres}`;
@@ -49,11 +51,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             entry.sessionDTO.forEach(session => {
                 const sessionItem = document.createElement("li");
+
                 sessionItem.innerHTML = `
-                    <span><strong>Зал:</strong> ${session.hallName}</span>
-                    <span><strong>Время:</strong> ${session.time}</span>
-                    <span><strong>Цена:</strong> ${session.price}₽</span>
+                    <a href="/sessions/${session.id}" class="session-link">
+                        <span><strong>Зал:</strong> ${session.hallName}</span>
+                        <span><strong>Время:</strong> ${session.time}</span>
+                        <span><strong>Цена:</strong> ${session.price}₽</span>
+                    </a>
                 `;
+
                 sessionList.appendChild(sessionItem);
             });
 

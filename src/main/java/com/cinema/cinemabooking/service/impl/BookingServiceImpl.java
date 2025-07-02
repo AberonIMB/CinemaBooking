@@ -12,9 +12,10 @@ import com.cinema.cinemabooking.model.enums.BookingStatus;
 import com.cinema.cinemabooking.repository.BookingRepository;
 import com.cinema.cinemabooking.service.interfaces.BookingService;
 import com.cinema.cinemabooking.service.interfaces.SeatService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDate;
@@ -63,6 +64,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void payBooking(Long id, User user) {
         Booking booking = bookingRepository.findById(id).orElseThrow(BookingNotFoundException::new);
 
@@ -79,7 +81,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void createBookings(Session session, List<Long> selectedSeatsIds, User user) {
 
         List<Seat> seats = selectedSeatsIds.stream()
@@ -89,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings = bookingRepository.findBySessionAndStatusNotAndSeatIn(session, BookingStatus.CANCELLED, seats);
 
         if (!bookings.isEmpty()) {
-            throw new SeatAlreadyBookedException(bookings.get(0).getSeat());
+            throw new SeatAlreadyBookedException(bookings.get(0));
         }
 
         for (Seat seat : seats) {
@@ -99,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void cancelBookings(List<Long> bookingIds, User user) {
         List<Booking> bookings = bookingRepository.findAllByUserAndIdIn(user, bookingIds);
 
@@ -110,7 +112,7 @@ public class BookingServiceImpl implements BookingService {
         for (Booking booking : bookings) {
             if (booking.getStatus() == BookingStatus.PAID) {
                 throw new BookingCancellationException("Невозможно отменить бронь, так как она уже оплачена, " +
-                        "а я не реализовал работу с оплатой");
+                        "а возврат денежных средств за обплаченные брони не реализован)");
             }
 
             if (booking.getStatus() == BookingStatus.CANCELLED) {

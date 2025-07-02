@@ -29,6 +29,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
      */
     List<Movie> findByTitleContainingIgnoreCase(String title);
 
+    /**
+     * Получить список активных фильмов без активных сеансов
+     * @return Список фильмов
+     */
     @Query("SELECT m FROM Movie m WHERE m.isActive = true " +
             "AND NOT EXISTS (SELECT s FROM Session s WHERE s.movie = m AND s.isActive = true)")
     List<Movie> findActiveMoviesWithoutActiveSessions();

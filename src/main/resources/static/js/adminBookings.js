@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function formatDateTimeManual(raw) {
       const [datePart, timePartWithMs] = raw.split('T');
-      const timePart = timePartWithMs.split('.')[0]; // отрезаем миллисекунды
+      const timePart = timePartWithMs.split('.')[0];
 
       const [year, month, day] = datePart.split('-');
       const [hour, minute] = timePart.split(':');
@@ -69,5 +69,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnFilter.addEventListener('click', loadBookings);
 
-    loadBookings(); // Загрузить при первом открытии страницы
+    loadBookings();
 });

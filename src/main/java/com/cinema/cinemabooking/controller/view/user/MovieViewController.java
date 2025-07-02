@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+/**
+ * Контроллер для отображения фильмов
+ */
 @Controller
 @RequestMapping("/movies")
 public class MovieViewController {
@@ -23,6 +26,9 @@ public class MovieViewController {
     @Autowired
     private MovieMapper movieMapper;
 
+    /**
+     * Отображает страницу с фильмами
+     */
     @GetMapping
     public String getMovies(Model model) {
 
@@ -36,6 +42,10 @@ public class MovieViewController {
         return "user/movies";
     }
 
+    /**
+     * Отображает страницу с фильмом
+     * @param id идентификатор фильма
+     */
     @GetMapping("/{id}")
     public String getMovie(@PathVariable Long id, Model model) {
         AdminMovieDTO movie = movieMapper.mapToAdminMovieDTO(movieService.getMovieById(id));

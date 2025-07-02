@@ -40,7 +40,7 @@ public interface MovieService {
      * @param query запрос
      * @return
      */
-    List<Movie> searchMoviesByTitle(String query);
+    List<Movie> getMoviesByTitle(String query);
 
     /**
      * Перевести фильм в активный
@@ -49,12 +49,13 @@ public interface MovieService {
     void activateMovie(Movie movie);
 
     /**
-     * Перевести фильм в неактивный
-     * @param movie фильм
+     * Получить список активных фильмов без активных сеансов
      */
-    void deactivateMovie(Movie movie);
-
     List<Movie> getActiveMoviesWithoutActiveSessions();
 
+    /**
+     * Сохранить список фильмов
+     * @param movies список фильмов
+     */
     void saveAll(List<Movie> movies);
 }

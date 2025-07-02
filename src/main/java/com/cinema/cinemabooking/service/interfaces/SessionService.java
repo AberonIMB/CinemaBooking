@@ -20,8 +20,19 @@ public interface SessionService {
      */
     List<Session> getActiveSessionsByHall(Hall hall);
 
+    /**
+     * Получить активные сеансы для конкретного дня
+     * @param date дата
+     * @return список сеансов
+     */
     List<Session> getActiveSessionsByDate(LocalDate date);
 
+    /**
+     * Получить активные сеансы для конкретного фильма в определенную дату
+     * @param movie фильм
+     * @param date дата
+     * @return список сеансов
+     */
     List<Session> getActiveSessionsByMovieAndDate(Movie movie, LocalDate date);
 
     /**
@@ -50,9 +61,23 @@ public interface SessionService {
      */
     void updateSession(SessionUpdateData data);
 
+    /**
+     * Получить список сеансов по статусу
+     * @param status статус
+     * @return список сеансов
+     */
     List<Session> getSessionsByStatus(boolean status);
 
+    /**
+     * Обновить статус сеанса
+     * @param session сеанс
+     * @param status статус
+     */
     void updateSessionStatus(Session session, boolean status);
 
+    /**
+     * Отменить сеанс
+     * @param session сеанс
+     */
     void cancelSession(Session session);
 }

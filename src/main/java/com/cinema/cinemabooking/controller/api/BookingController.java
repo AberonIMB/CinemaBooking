@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Api контроллер для работы с бронированиями
+ */
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
@@ -24,6 +27,13 @@ public class BookingController {
     @Autowired
     private BookingMapper bookingMapper;
 
+    /**
+     * Получает список бронирований по фильтрам
+     * @param email имя пользователя - email
+     * @param movieTitle название фильма
+     * @param date дата сеанса
+     * @param status статус бронирования
+     */
     @GetMapping
     public List<AdminUserInfoBookingDTO> getBookings(@RequestParam(required = false) String email,
                                                      @RequestParam(required = false) String movieTitle,
@@ -38,10 +48,18 @@ public class BookingController {
         );
     }
 
+    /**
+     * Преобразует строку в статус бронирования
+     */
     private BookingStatus getBookingStatus(String status) {
         if (status == null) {
             return null;
         }
-        return BookingStatus.valueOf(status.toUpperCase());
+
+        try {
+            return BookingStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }

@@ -34,9 +34,10 @@ public class SessionController {
      */
     @GetMapping
     public List<AdminSessionDTO> getSessionsByFilters(@RequestParam(required = false) String movieTitle,
-                                             @RequestParam(required = false) Long hallId,
-                                             @RequestParam(required = false)
-                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date) {
+                                                      @RequestParam(required = false) Long hallId,
+                                                      @RequestParam(required = false)
+                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                          LocalDate date) {
 
         return sessionService.findSessionsByFilters(movieTitle, hallId, date)
                 .stream()

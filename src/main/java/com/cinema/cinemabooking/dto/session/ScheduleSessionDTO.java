@@ -2,6 +2,9 @@ package com.cinema.cinemabooking.dto.session;
 
 import java.time.LocalTime;
 
+/**
+ * DTO для отображения сеанса в расписании
+ */
 public class ScheduleSessionDTO {
 
     private Long id;

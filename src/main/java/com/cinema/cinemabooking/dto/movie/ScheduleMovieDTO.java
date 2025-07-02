@@ -1,5 +1,8 @@
 package com.cinema.cinemabooking.dto.movie;
 
+/**
+ * DTO для отображения фильма в расписании
+ */
 public class ScheduleMovieDTO {
 
     private Long id;

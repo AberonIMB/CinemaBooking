@@ -1,9 +1,6 @@
 package com.cinema.cinemabooking.controller.view.user;
 
 import com.cinema.cinemabooking.dto.booking.UserInfoBookingDTO;
-import com.cinema.cinemabooking.exception.booking.BookingCancellationException;
-import com.cinema.cinemabooking.exception.booking.BookingNotFoundException;
-import com.cinema.cinemabooking.exception.booking.BookingPaymentException;
 import com.cinema.cinemabooking.mapper.interfaces.BookingMapper;
 import com.cinema.cinemabooking.model.User;
 import com.cinema.cinemabooking.service.interfaces.BookingService;
@@ -17,6 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.List;
 
+/**
+ * Контроллер для работы с бронями
+ */
 @Controller
 @RequestMapping("/bookings")
 public class BookingViewController {
@@ -30,6 +30,9 @@ public class BookingViewController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Отображает страницу броней пользователя
+     */
     @GetMapping("/my")
     public String getMyBookings(Model model, Principal principal) {
         User user = userService.getUserByEmail(principal.getName());
@@ -46,34 +49,29 @@ public class BookingViewController {
         return "user/myBookings";
     }
 
+    /**
+     *  Отменяет бронирования
+     * @param bookingIds список идентификаторов броней
+     */
     @PostMapping("/cancel")
     public String cancelBookings(@RequestParam("bookingIds") List<Long> bookingIds,
                                  Principal principal, RedirectAttributes redirect) {
-
         User user = userService.getUserByEmail(principal.getName());
-
-        try {
-            bookingService.cancelBookings(bookingIds, user);
-            redirect.addFlashAttribute("success", "Бронь успешно отменена");
-        } catch (BookingNotFoundException | BookingCancellationException e) {
-            redirect.addFlashAttribute("error", e.getMessage());
-            return "redirect:/bookings/my";
-        }
+        bookingService.cancelBookings(bookingIds, user);
+        redirect.addFlashAttribute("success", "Бронь успешно отменена");
 
         return "redirect:/bookings/my";
     }
 
+    /**
+     * Имитирует оплату брони
+     * @param id идентификатор брони
+     */
     @PostMapping("/pay/{id}")
     public String payBooking(@PathVariable Long id, Principal principal, RedirectAttributes redirect) {
-
         User user = userService.getUserByEmail(principal.getName());
-
-        try {
-            bookingService.payBooking(id, user);
-            redirect.addFlashAttribute("success", "Бронь успешно оплачен");
-        } catch (BookingNotFoundException | BookingPaymentException e) {
-            redirect.addFlashAttribute("error", e.getMessage());
-        }
+        bookingService.payBooking(id, user);
+        redirect.addFlashAttribute("success", "Бронь успешно оплачен");
 
         return "redirect:/bookings/my";
     }
