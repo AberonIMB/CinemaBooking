@@ -50,6 +50,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SeatAlreadyBookedException.class)
     public String handleSeatAlreadyBookedException(SeatAlreadyBookedException e, RedirectAttributes redirect) {
         redirect.addFlashAttribute("error", e.getMessage());
-        return "redirect:/session/" + e.getSessionId();
+        return "redirect:/sessions/" + e.getSessionId();
     }
 }
