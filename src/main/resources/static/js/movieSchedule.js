@@ -2,9 +2,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const movieId = document.getElementById('movieId').value;
     const dateInput = document.getElementById('dateFilter');
 
+    // Устанавливаем сегодняшнюю дату по умолчанию
+    if (!dateInput.value) {
+        dateInput.value = getTodayDate();
+    }
+
     const scheduleSection = document.createElement('div');
     scheduleSection.id = 'scheduleResults';
     document.querySelector('.schedule-section').appendChild(scheduleSection);
+
+    function getTodayDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
     function fetchAndRenderSchedule(date) {
         fetch(`/api/schedule/movie/${movieId}?date=${date}`)
@@ -42,11 +55,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // При загрузке страницы
+    // Загрузка при старте
     fetchAndRenderSchedule(dateInput.value);
 
     // При изменении даты
     dateInput.addEventListener('change', function () {
+        // Если поле очищено вручную — вернуть сегодняшнюю дату
+        if (!this.value) {
+            this.value = getTodayDate();
+        }
         fetchAndRenderSchedule(this.value);
     });
 });

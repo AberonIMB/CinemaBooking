@@ -2,11 +2,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const dateInput = document.getElementById("dateFilter");
     const scheduleContainer = document.getElementById("scheduleContainer");
 
-    // Загрузка по умолчанию при старте
+    // Получение текущей даты в формате YYYY-MM-DD
+    function getTodayDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Установка текущей даты, если поле пустое
+    function ensureDateSelected() {
+        if (!dateInput.value) {
+            dateInput.value = getTodayDate();
+        }
+    }
+
+    // Установка значения по умолчанию при запуске
+    ensureDateSelected();
     loadSchedule(dateInput.value);
 
     // Отслеживание изменения даты
     dateInput.addEventListener("change", () => {
+        ensureDateSelected();
         loadSchedule(dateInput.value);
     });
 
@@ -37,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const movieBlock = document.createElement("div");
             movieBlock.className = "movie-block";
 
-            // Ссылка на фильм
             const movieHeader = document.createElement("h3");
             movieHeader.innerHTML = `<a href="/movies/${entry.movieDTO.id}" class="movie-link">
                                         ${entry.movieDTO.title} (${entry.movieDTO.duration} мин)
