@@ -38,9 +38,8 @@ public class SessionStatusScheduler {
      * Фильмы, на которые нет сеансов, становятся неактивными
      */
     @Scheduled(cron = "0 0/10 * * * *")
-//    @Scheduled(fixedDelay = 60000)
     @Transactional
-    public void updateeSessionStatus() {
+    public void updateSessionStatus() {
         LocalDateTime now = LocalDateTime.now();
 
         List<Session> activeSessions = sessionService.getSessionsByStatus(true);

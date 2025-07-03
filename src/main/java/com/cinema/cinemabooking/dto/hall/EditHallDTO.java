@@ -13,11 +13,11 @@ public class EditHallDTO {
     private String name;
 
     @Min(value = 1, message = "Количество рядов должно быть больше нуля")
-    @Max(value = 20, message = "Количество рядов должно быть меньше 20")
+    @Max(value = 10, message = "Количество рядов должно быть меньше 10")
     private int numberOfRows;
 
     @Min(value = 1, message = "Количество мест в ряду должно быть больше нуля")
-    @Max(value = 20, message = "Количество мест в ряду должно быть меньше 20")
+    @Max(value = 10, message = "Количество мест в ряду должно быть меньше 10")
     private int seatsInRow;
 
     private boolean isActive;

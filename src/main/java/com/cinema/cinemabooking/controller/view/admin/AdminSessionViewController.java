@@ -67,6 +67,7 @@ public class AdminSessionViewController {
     @PostMapping("/create")
     public String createSession(@Valid @ModelAttribute("session") CreateSessionDTO createSessionDTO,
                                 BindingResult bindingResult,
+                                RedirectAttributes redirect,
                                 Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -78,6 +79,7 @@ public class AdminSessionViewController {
         SessionCreateData sessionData = sessionMapper.mapToCreateData(createSessionDTO);
         sessionService.createSession(sessionData);
 
+        redirect.addFlashAttribute("success", "Сеанс успешно создан");
         return "redirect:/admin/sessions";
     }
 
